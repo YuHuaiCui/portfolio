@@ -11,6 +11,7 @@ import { ChevronLeft, ChevronRight, Github, Info, LinkIcon } from "lucide-react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { cn } from "@/lib/utils"
+import { useToast } from "@/components/ui/use-toast"
 
 // --- Types ---
 interface Project {
@@ -18,10 +19,11 @@ interface Project {
   slug: string
   title: string
   description: string
-  images: string[]
+  thumbnail: string // Thumbnail image for the card
+  images?: string[] // Optional additional images for the carousel
   tags: string[]
   tagColors: Record<string, string>
-  githubLink: string
+  githubLink?: string // Now optional
   detailedDescription?: string
   videoUrl?: string
 }
@@ -116,6 +118,86 @@ const tagColorMap: Record<string, any> = {
     hover: "hover:bg-purple-200",
     hoverDark: "dark:hover:bg-purple-800",
   },
+  python: {
+    bg: "bg-blue-100",
+    bgDark: "dark:bg-blue-900/50",
+    text: "text-blue-800",
+    textDark: "dark:text-blue-200",
+    hover: "hover:bg-blue-200",
+    hoverDark: "dark:hover:bg-blue-800",
+  },
+  django: {
+    bg: "bg-green-100",
+    bgDark: "dark:bg-green-900/50",
+    text: "text-green-800",
+    textDark: "dark:text-green-200",
+    hover: "hover:bg-green-200",
+    hoverDark: "dark:hover:bg-green-800",
+  },
+  postgresql: {
+    bg: "bg-blue-100",
+    bgDark: "dark:bg-blue-900/50",
+    text: "text-blue-800",
+    textDark: "dark:text-blue-200",
+    hover: "hover:bg-blue-200",
+    hoverDark: "dark:hover:bg-blue-800",
+  },
+  axios: {
+    bg: "bg-purple-100",
+    bgDark: "dark:bg-purple-900/50",
+    text: "text-purple-800",
+    textDark: "dark:text-purple-200",
+    hover: "hover:bg-purple-200",
+    hoverDark: "dark:hover:bg-purple-800",
+  },
+  materialui: {
+    bg: "bg-blue-100",
+    bgDark: "dark:bg-blue-900/50",
+    text: "text-blue-800",
+    textDark: "dark:text-blue-200",
+    hover: "hover:bg-blue-200",
+    hoverDark: "dark:hover:bg-blue-800",
+  },
+  docker: {
+    bg: "bg-blue-100",
+    bgDark: "dark:bg-blue-900/50",
+    text: "text-blue-800",
+    textDark: "dark:text-blue-200",
+    hover: "hover:bg-blue-200",
+    hoverDark: "dark:hover:bg-blue-800",
+  },
+  websockets: {
+    bg: "bg-indigo-100",
+    bgDark: "dark:bg-indigo-900/50",
+    text: "text-indigo-800",
+    textDark: "dark:text-indigo-200",
+    hover: "hover:bg-indigo-200",
+    hoverDark: "dark:hover:bg-indigo-800",
+  },
+  djangorest: {
+    bg: "bg-green-100",
+    bgDark: "dark:bg-green-900/50",
+    text: "text-green-800",
+    textDark: "dark:text-green-200",
+    hover: "hover:bg-green-200",
+    hoverDark: "dark:hover:bg-green-800",
+  },
+  framermotion: {
+    bg: "bg-purple-100",
+    bgDark: "dark:bg-purple-900/50",
+    text: "text-purple-800",
+    textDark: "dark:text-purple-200",
+    hover: "hover:bg-purple-200",
+    hoverDark: "dark:hover:bg-purple-800",
+  },
+  shadcn: {
+    bg: "bg-gray-100",
+    bgDark: "dark:bg-gray-800",
+    text: "text-gray-800",
+    textDark: "dark:text-gray-200",
+    hover: "hover:bg-gray-200",
+    hoverDark: "dark:hover:bg-gray-700",
+  },
   default: {
     bg: "bg-gray-100",
     bgDark: "dark:bg-gray-800",
@@ -129,21 +211,87 @@ const tagColorMap: Record<string, any> = {
 // --- Static project data ---
 const projects: Project[] = [
   {
+    id: 0,
+    slug: "portfolio-website",
+    title: "Portfolio Website",
+    description: "A modern, responsive portfolio website built with Next.js and interactive features.",
+    thumbnail: "/placeholder.svg?height=300&width=500&text=Portfolio+Website",
+    images: [
+      "/placeholder.svg?height=300&width=500&text=Dark+Mode",
+      "/placeholder.svg?height=300&width=500&text=Particle+Network",
+      "/placeholder.svg?height=300&width=500&text=Project+Details",
+    ],
+    tags: [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "Framer Motion",
+      "Shadcn UI",
+      "Responsive Design",
+      "Dark Mode",
+    ],
+    tagColors: {
+      "Next.js": "nextjs",
+      React: "react",
+      TypeScript: "typescript",
+      "Tailwind CSS": "tailwind",
+      "Framer Motion": "framermotion",
+      "Shadcn UI": "shadcn",
+      "Responsive Design": "default",
+      "Dark Mode": "default",
+    },
+    githubLink: "#",
+    detailedDescription:
+      "This portfolio website showcases my projects and skills using modern web technologies. Built with Next.js and React, it features a responsive design that works seamlessly across all devices. The site includes interactive elements like the particle network animation on the home page, smooth scrolling transitions, and dynamic project cards.\n\n" +
+      "Key features include:\n" +
+      "• Interactive particle network background with mouse tracking\n" +
+      "• Dark/light mode with theme persistence\n" +
+      "• Responsive design for all screen sizes\n" +
+      "• Animated section transitions using Framer Motion\n" +
+      "• Project showcase with detailed modal views\n" +
+      "• Performance optimizations for fast loading\n" +
+      "• Server-side form handling for the contact section\n\n" +
+      "The UI components are built using Shadcn UI and styled with Tailwind CSS for a clean, modern aesthetic. TypeScript provides type safety throughout the codebase, ensuring a robust and maintainable application.",
+  },
+  {
     id: 1,
     slug: "ecommerce-platform",
     title: "E‑Commerce Platform",
     description:
       "A full‑stack e‑commerce platform with product management, cart functionality, and payment processing.",
+    thumbnail: "/placeholder.svg?height=300&width=500",
     images: [
-      "/placeholder.svg?height=300&width=500",
       "/placeholder.svg?height=300&width=500&text=Product+Page",
       "/placeholder.svg?height=300&width=500&text=Checkout",
     ],
-    tags: ["React", "Node.js", "MongoDB", "Stripe"],
-    tagColors: { React: "react", "Node.js": "node", MongoDB: "mongodb", Stripe: "stripe" },
+    tags: [
+      "TypeScript",
+      "React",
+      "Django",
+      "PostgreSQL",
+      "Docker",
+      "Axios",
+      "Python",
+      "Material-UI",
+      "Django REST Framework",
+      "WebSockets",
+    ],
+    tagColors: {
+      TypeScript: "typescript",
+      React: "react",
+      Django: "django",
+      PostgreSQL: "postgresql",
+      Docker: "docker",
+      Axios: "axios",
+      Python: "python",
+      "Material-UI": "materialui",
+      "Django REST Framework": "djangorest",
+      WebSockets: "websockets",
+    },
     githubLink: "#",
     detailedDescription:
-      "This comprehensive e‑commerce platform features a responsive design, user authentication, product catalog with filtering and search, shopping cart functionality, secure checkout with Stripe integration, order history, and an admin dashboard for product and order management. Built with React for the frontend, Node.js and Express for the backend, and MongoDB for the database.",
+      "This comprehensive e‑commerce platform features a responsive design, user authentication, product catalog with filtering and search, shopping cart functionality, secure checkout with Stripe integration, order history, and an admin dashboard for product and order management. Built with React and TypeScript for the frontend, Django and Python for the backend, and PostgreSQL for the database. Real-time features are implemented using WebSockets, and the entire application is containerized with Docker for easy deployment.",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
   },
   {
@@ -151,14 +299,10 @@ const projects: Project[] = [
     slug: "task-management",
     title: "Task Management App",
     description: "A collaborative task management application with real‑time updates and team functionality.",
-    images: [
-      "/placeholder.svg?height=300&width=500",
-      "/placeholder.svg?height=300&width=500&text=Task+Board",
-      "/placeholder.svg?height=300&width=500&text=Calendar+View",
-    ],
+    thumbnail: "/placeholder.svg?height=300&width=500",
     tags: ["Next.js", "Firebase", "Tailwind CSS"],
     tagColors: { "Next.js": "nextjs", Firebase: "firebase", "Tailwind CSS": "tailwind" },
-    githubLink: "#",
+    // No githubLink for this project
     detailedDescription:
       "A task management application that allows teams to collaborate in real‑time. Features include task creation and assignment, due dates, priority levels, comments, file attachments, and real‑time notifications. The app uses Next.js for the frontend, Firebase for real‑time database and authentication, and Tailwind CSS for styling.",
   },
@@ -167,8 +311,8 @@ const projects: Project[] = [
     slug: "weather-dashboard",
     title: "Weather Dashboard",
     description: "A weather dashboard that displays current and forecasted weather data for multiple locations.",
+    thumbnail: "/placeholder.svg?height=300&width=500",
     images: [
-      "/placeholder.svg?height=300&width=500",
       "/placeholder.svg?height=300&width=500&text=Forecast+View",
       "/placeholder.svg?height=300&width=500&text=Location+Search",
     ],
@@ -185,6 +329,7 @@ export default function Projects() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const projectParam = searchParams.get("project")
+  const { toast } = useToast()
 
   // derive dialog state from param
   const selectedProject = projectParam ? (projects.find((p) => p.slug === projectParam) ?? null) : null
@@ -213,23 +358,56 @@ export default function Projects() {
     router.replace(`${window.location.pathname}#projects`, { scroll: false })
   }
 
-  const nextImage = () => selectedProject && setCurrentImageIndex((i) => (i + 1) % selectedProject.images.length)
-  const prevImage = () =>
-    selectedProject &&
-    setCurrentImageIndex((i) => (i - 1 + selectedProject.images.length) % selectedProject.images.length)
+  // Fix the nextImage function to handle undefined images
+  const nextImage = () => {
+    if (selectedProject?.images && selectedProject.images.length > 0) {
+      setCurrentImageIndex((i) => (i + 1) % selectedProject.images.length)
+    }
+  }
+
+  // Fix the prevImage function to handle undefined images
+  const prevImage = () => {
+    if (selectedProject?.images && selectedProject.images.length > 0) {
+      setCurrentImageIndex((i) => (i - 1 + selectedProject.images.length) % selectedProject.images.length)
+    }
+  }
+
   const copyShareLink = async () => {
     if (!shareUrl) return
     try {
       await navigator.clipboard.writeText(shareUrl)
-      alert("Link copied!")
+      toast({
+        title: "Link copied!",
+        description: "Project link has been copied to clipboard",
+        variant: "success",
+        duration: 3000,
+      })
     } catch {
-      console.error("copy failed")
+      toast({
+        title: "Failed to copy",
+        description: "Could not copy the link to clipboard",
+        variant: "destructive",
+        duration: 3000,
+      })
     }
   }
   const getTagStyles = (tag: string, proj: Project) => {
     const key = proj.tagColors[tag]?.toLowerCase() || "default"
     const s = tagColorMap[key] ?? tagColorMap.default
     return cn(s.bg, s.bgDark, s.text, s.textDark, s.hover, s.hoverDark)
+  }
+
+  // Update the getCurrentImageSrc function to handle projects with only thumbnails
+  const getCurrentImageSrc = () => {
+    if (selectedProject?.images && selectedProject.images.length > 0) {
+      return selectedProject.images[currentImageIndex]
+    }
+    return selectedProject?.thumbnail || "/placeholder.svg"
+  }
+
+  // Check if project has additional images
+  const hasAdditionalImages = (project: Project) => {
+    return project.images && project.images.length > 0
   }
 
   return (
@@ -275,7 +453,7 @@ export default function Projects() {
               <Card className="overflow-hidden flex flex-col h-full group transition-shadow hover:shadow-xl border-transparent hover:border-royal-200 dark:hover:border-royal-800">
                 <div className="relative h-40 sm:h-48 w-full overflow-hidden">
                   <Image
-                    src={project.images[0] || "/placeholder.svg"}
+                    src={project.thumbnail || "/placeholder.svg"}
                     alt={project.title}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-110"
@@ -290,26 +468,36 @@ export default function Projects() {
                 </CardHeader>
                 <CardContent className="flex-grow p-4 md:p-6 pt-0">
                   <div className="flex flex-wrap gap-2 mt-2">
-                    {project.tags.map((tag) => (
+                    {project.tags.slice(0, 3).map((tag) => (
                       <Badge key={tag} className={`text-xs ${getTagStyles(tag, project)}`}>
                         {tag}
                       </Badge>
                     ))}
+                    {project.tags.length > 3 && (
+                      <Badge className="text-xs bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200">
+                        +{project.tags.length - 3} more
+                      </Badge>
+                    )}
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-between p-4 md:p-6 pt-0">
-                  <Button
-                    asChild
-                    variant="outline"
-                    size={isMobile ? "sm" : "default"}
-                    className="transition-all duration-300 hover:scale-105 hover:bg-background/80 hover:border-royal-300 
-                    dark:hover:border-royal-700 group"
-                  >
-                    <a href={project.githubLink} target="_blank" rel="noopener noreferrer">
-                      <Github className="mr-2 h-4 w-4 transition-transform group-hover:rotate-12 duration-200" />
-                      <span>Code</span>
-                    </a>
-                  </Button>
+                  {/* Only show GitHub button if githubLink exists */}
+                  {project.githubLink ? (
+                    <Button
+                      asChild
+                      variant="outline"
+                      size={isMobile ? "sm" : "default"}
+                      className="transition-all duration-300 hover:scale-105 hover:bg-background/80 hover:border-royal-300 
+                      dark:hover:border-royal-700 group"
+                    >
+                      <a href={project.githubLink} target="_blank" rel="noopener noreferrer">
+                        <Github className="mr-2 h-4 w-4 transition-transform group-hover:rotate-12 duration-200" />
+                        <span>Code</span>
+                      </a>
+                    </Button>
+                  ) : (
+                    <div></div> // Empty div to maintain flex layout
+                  )}
                   <Button
                     size={isMobile ? "sm" : "default"}
                     className="bg-gradient-to-r from-royal-500 to-royal-700 hover:from-royal-600 hover:to-royal-800 border-0 
@@ -343,52 +531,23 @@ export default function Projects() {
         >
           {selectedProject && (
             <>
-              <DialogHeader className="flex justify-between items-center">
-                <DialogTitle className="text-xl md:text-2xl">{selectedProject.title}</DialogTitle>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={copyShareLink}
-                  title="Copy link"
-                  className="rounded-full transition-all duration-300 hover:scale-110 hover:bg-background/80 
-                  hover:border-royal-300 dark:hover:border-royal-700"
-                >
-                  <LinkIcon className="h-4 w-4 transition-transform hover:rotate-12 duration-200" />
-                </Button>
+              <DialogHeader className="mb-4">
+                <div className="flex items-center justify-center">
+                  <DialogTitle className="text-xl md:text-2xl">{selectedProject.title}</DialogTitle>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={copyShareLink}
+                    title="Copy link"
+                    className="rounded-full transition-all duration-300 hover:scale-110 hover:bg-background/80 
+      hover:border-royal-300 dark:hover:border-royal-700 ml-2"
+                  >
+                    <LinkIcon className="h-4 w-4 transition-transform hover:rotate-12 duration-200" />
+                  </Button>
+                </div>
               </DialogHeader>
 
-              {/* Image carousel */}
-              <div className="relative w-full h-64 mb-4">
-                <Image
-                  src={selectedProject.images[currentImageIndex] || "/placeholder.svg"}
-                  alt={`${selectedProject.title} ${currentImageIndex + 1}`}
-                  fill
-                  className="object-cover rounded-lg"
-                />
-                {selectedProject.images.length > 1 && (
-                  <>
-                    <button
-                      onClick={prevImage}
-                      className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-1"
-                    >
-                      <ChevronLeft className="h-5 w-5" />
-                    </button>
-                    <button
-                      onClick={nextImage}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-1"
-                    >
-                      <ChevronRight className="h-5 w-5" />
-                    </button>
-                  </>
-                )}
-              </div>
-
-              {/* Description */}
-              <div className="prose dark:prose-invert max-w-none mb-4">
-                <p>{selectedProject.detailedDescription}</p>
-              </div>
-
-              {/* Optional video */}
+              {/* Optional video - now placed above the image */}
               {selectedProject.videoUrl && (
                 <div className="aspect-video w-full rounded-lg overflow-hidden mb-4">
                   <iframe
@@ -402,6 +561,39 @@ export default function Projects() {
                 </div>
               )}
 
+              {/* Image carousel - only show if project has additional images */}
+              {selectedProject.images && selectedProject.images.length > 0 && (
+                <div className="relative w-full h-64 mb-4">
+                  <Image
+                    src={getCurrentImageSrc() || "/placeholder.svg"}
+                    alt={`${selectedProject.title}`}
+                    fill
+                    className="object-cover rounded-lg"
+                  />
+                  {selectedProject.images.length > 1 && (
+                    <>
+                      <button
+                        onClick={prevImage}
+                        className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-1"
+                      >
+                        <ChevronLeft className="h-5 w-5" />
+                      </button>
+                      <button
+                        onClick={nextImage}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-1"
+                      >
+                        <ChevronRight className="h-5 w-5" />
+                      </button>
+                    </>
+                  )}
+                </div>
+              )}
+
+              {/* Description */}
+              <div className="prose dark:prose-invert max-w-none mb-4">
+                <p className="whitespace-pre-line">{selectedProject.detailedDescription}</p>
+              </div>
+
               {/* Tags */}
               <div className="flex flex-wrap gap-2">
                 {selectedProject.tags.map((tag) => (
@@ -410,17 +602,21 @@ export default function Projects() {
                   </Badge>
                 ))}
               </div>
-              <Button
-                asChild
-                variant="outline"
-                className="border-royal-300 dark:border-royal-700 transition-all duration-300 
-                hover:scale-105 hover:bg-background/80 group"
-              >
-                <a href={selectedProject.githubLink} target="_blank" rel="noopener noreferrer">
-                  <Github className="mr-2 h-4 w-4 transition-transform group-hover:rotate-12 duration-200" />
-                  <span>View Code</span>
-                </a>
-              </Button>
+
+              {/* Only show GitHub button if githubLink exists */}
+              {selectedProject.githubLink && (
+                <Button
+                  asChild
+                  variant="outline"
+                  className="border-royal-300 dark:border-royal-700 transition-all duration-300 
+                  hover:scale-105 hover:bg-background/80 group"
+                >
+                  <a href={selectedProject.githubLink} target="_blank" rel="noopener noreferrer">
+                    <Github className="mr-2 h-4 w-4 transition-transform group-hover:rotate-12 duration-200" />
+                    <span>View Code</span>
+                  </a>
+                </Button>
+              )}
             </>
           )}
         </DialogContent>

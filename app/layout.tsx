@@ -3,13 +3,13 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
+import { Toaster } from "@/components/ui/toaster"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Portfolio",
   description: "My professional portfolio showcasing my projects and experience",
-    generator: 'v0.dev'
 }
 
 export default function RootLayout({
@@ -25,6 +25,7 @@ export default function RootLayout({
       <body className={`${inter.className} overflow-x-hidden w-full`}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
           {children}
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
