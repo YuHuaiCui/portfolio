@@ -70,13 +70,10 @@ export default function Resume() {
       const result = await verifyResumeDownload(token)
 
       if (result.success) {
-        // Create a temporary link and trigger download
-        const link = document.createElement("a")
-        link.href = result.downloadUrl
-        link.download = "DanielCui_Resume.pdf"
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
+        const link = document.createElement("a");
+        link.href = result.downloadUrl;     // "/api/download"
+        link.download = "DanielCui_Resume.pdf";
+        link.click();
       } else {
         toast({
           title: "Download Failed",
@@ -135,7 +132,7 @@ export default function Resume() {
                     <FileText className="h-16 w-16 text-royal-600 dark:text-royal-400" />
                   </div>
                   <div className="text-center mt-6">
-                    <h3 className="text-xl font-bold">Your Name</h3>
+                    <h3 className="text-xl font-bold">Daniel Cui</h3>
                     <p className="text-muted-foreground">Full Stack Developer</p>
                   </div>
                   <div className="mt-8 space-y-2 text-sm">

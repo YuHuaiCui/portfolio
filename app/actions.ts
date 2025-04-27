@@ -5,7 +5,7 @@ async function verifyRecaptchaToken(token: string) {
   if (!token) return false
 
   // Replace with your actual reCAPTCHA secret key
-  const secretKey = process.env.NEXT_RECAPTCHA_SECRET_KEY!
+  const secretKey = process.env.RECAPTCHA_SECRET_KEY
 
   try {
     const response = await fetch("https://www.google.com/recaptcha/api/siteverify", {
@@ -27,18 +27,9 @@ async function verifyRecaptchaToken(token: string) {
 }
 
 export async function verifyResumeDownload(token: string) {
-  // Verify reCAPTCHA token
-  const isValidToken = await verifyRecaptchaToken(token)
-
+  const isValidToken = await verifyRecaptchaToken(token);
   if (!isValidToken) {
-    return {
-      success: false,
-      message: "Verification failed. Please try again.",
-    }
+    return { success: false, message: "Verification failed. Please try again." };
   }
-
-  return {
-    success: true,
-    downloadUrl: "/resume.pdf",
-  }
+  return { success: true, downloadUrl: "/api/download" };
 }

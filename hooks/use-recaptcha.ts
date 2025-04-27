@@ -17,7 +17,7 @@ export function useRecaptcha(action: string) {
   const [isLoading, setIsLoading] = useState(false)
 
   // Replace this with your actual reCAPTCHA site key
-  const siteKey = process.env.NEXT_RECAPTCHA_SITE_KEY!
+  const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
 
   useEffect(() => {
     // Create a flag to track if the component is still mounted
