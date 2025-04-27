@@ -128,14 +128,14 @@ export default function Contact() {
               <form
                 ref={formRef}
                 onSubmit={handleSubmit}
-                action="https://formsubmit.co/hello@dcui.dev"
+                action="de2cd52bbe952772d614be0c6d64c5b9"
                 method="POST"
                 className="space-y-6"
               >
                 {/* FormSubmit configuration */}
                 <input type="hidden" name="_subject" value="New message from your portfolio!" />
                 <input type="hidden" name="_template" value="table" />
-                <input type="hidden" name="_captcha" value="false" /> {/* We're using our own reCAPTCHA */}
+                <input type="hidden" name="_captcha" value="false" />
                 <input type="hidden" name="_next" value={typeof window !== "undefined" ? window.location.href : ""} />
                 {/* Honeypot field to prevent spam */}
                 <input type="text" name="_honey" style={{ display: "none" }} />

@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from "react"
 
-// Define the window interface to include the recaptcha object
 declare global {
   interface Window {
     grecaptcha: {

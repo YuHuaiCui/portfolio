@@ -1,10 +1,8 @@
 "use server"
 
-// Function to verify reCAPTCHA token
 async function verifyRecaptchaToken(token: string) {
   if (!token) return false
 
-  // Replace with your actual reCAPTCHA secret key
   const secretKey = process.env.RECAPTCHA_SECRET_KEY
 
   try {
