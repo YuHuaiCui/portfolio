@@ -103,7 +103,7 @@ export default function Contact() {
                 </Button>
 
                 <p className="text-xs text-muted-foreground text-center mt-2">
-                  Protected by reCAPTCHA.
+                  Protected by reCAPTCHA
                 </p>
               </form>
             </CardContent>
