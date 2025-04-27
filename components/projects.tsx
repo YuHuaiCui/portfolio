@@ -477,7 +477,7 @@ const projects: Project[] = [
       "    UEDBot uses Marines and Siege Tanks for defense while expanding its base with Missile Turrets to counter air threats in later stages." +
       "  </li>" +
       "</ul>",
-    videoUrl: "UEDBot/demo.mp4"
+    videoUrl: "https://www.youtube-nocookie.com/embed/aj93LRXxVWA"
   },
   {
     id: 3,
