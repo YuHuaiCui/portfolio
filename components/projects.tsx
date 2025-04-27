@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { motion } from "framer-motion"
 import Image from "next/image"
@@ -577,7 +577,7 @@ const projects: Project[] = [
   },
 ]
 
-export default function Projects() {
+function ProjectsContent() {
   const isMobile = useMediaQuery("(max-width: 640px)")
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -664,6 +664,203 @@ export default function Projects() {
   }
 
   return (
+    <>
+      <motion.div
+        className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+        variants={{ hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.2 } } }}
+      >
+        {projects.map((project) => (
+          <motion.div
+            key={project.id}
+            variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
+          >
+            <Card className="overflow-hidden flex flex-col h-full group transition-shadow hover:shadow-xl border-transparent hover:border-royal-200 dark:hover:border-royal-800">
+              <div className="relative h-40 sm:h-48 w-full overflow-hidden">
+                <Image
+                  src={project.thumbnail || "/placeholder.svg"}
+                  alt={project.title}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </div>
+              <CardHeader className="p-4 md:p-6">
+                <CardTitle className="text-lg md:text-xl group-hover:text-royal-600 dark:group-hover:text-royal-400 transition-colors">
+                  {project.title}
+                </CardTitle>
+                <CardDescription className="text-sm md:text-base">{project.description}</CardDescription>
+              </CardHeader>
+              <CardContent className="flex-grow p-4 md:p-6 pt-0">
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {project.tags.slice(0, 3).map((tag) => (
+                    <Badge key={tag} className={`text-xs ${getTagStyles(tag, project)}`}>
+                      {tag}
+                    </Badge>
+                  ))}
+                  {project.tags.length > 3 && (
+                    <Badge className="text-xs bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200">
+                      +{project.tags.length - 3} more
+                    </Badge>
+                  )}
+                </div>
+              </CardContent>
+
+              {/* Updated CardFooter */}
+              <CardFooter className="flex items-center p-4 md:p-6 pt-0">
+                {project.devpostLink ? (
+                  <Button
+                    asChild
+                    variant="outline"
+                    size={isMobile ? "sm" : "default"}
+                    className="transition-all duration-300 hover:scale-105 hover:bg-background/80 hover:border-royal-300 dark:hover:border-royal-700 group"
+                  >
+                    <a href={project.devpostLink} target="_blank" rel="noopener noreferrer">
+                      <span className="mr-2 font-bold text-blue-500">D</span>
+                      <span>Devpost</span>
+                    </a>
+                  </Button>
+                ) : project.githubLink ? (
+                  <Button
+                    asChild
+                    variant="outline"
+                    size={isMobile ? "sm" : "default"}
+                    className="transition-all duration-300 hover:scale-105 hover:bg-background/80 hover:border-royal-300 dark:hover:border-royal-700 group"
+                  >
+                    <a href={project.githubLink} target="_blank" rel="noopener noreferrer">
+                      <Github className="mr-2 h-4 w-4 transition-transform group-hover:rotate-12 duration-200" />
+                      <span>Code</span>
+                    </a>
+                  </Button>
+                ) : null}
+
+                <Button
+                  size={isMobile ? "sm" : "default"}
+                  onClick={() => handleProjectDetails(project)}
+                  className="ml-auto bg-gradient-to-r from-royal-500 to-royal-700 hover:from-royal-600 hover:to-royal-800 border-0 transition-all duration-300 hover:scale-105 hover:shadow-md hover:shadow-royal-500/20 dark:hover:shadow-royal-700/20 relative overflow-hidden group"
+                >
+                  <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-royal-400/0 via-white/10 to-royal-400/0 transform -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
+                  <Info className="mr-2 h-4 w-4 transition-transform group-hover:rotate-12 duration-200" />
+                  <span className="relative z-10">Details</span>
+                </Button>
+              </CardFooter>
+            </Card>
+          </motion.div>
+        ))}
+      </motion.div>
+
+      {/* DETAILS DIALOG */}
+      <Dialog open={isDialogOpen} onOpenChange={(open) => !open && handleCloseDialog()}>
+        <DialogContent
+          className="max-w-3xl max-h-[90vh] overflow-y-auto p-4 md:p-6"
+          onPointerDownOutside={(e) => {
+            e.preventDefault()
+            handleCloseDialog()
+          }}
+        >
+          {selectedProject && (
+            <>
+              <DialogHeader className="mb-4">
+                <div className="flex items-center justify-center">
+                  <DialogTitle className="text-xl md:text-2xl">{selectedProject.title}</DialogTitle>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={copyShareLink}
+                    title="Copy link"
+                    className="rounded-full ml-2 transition-all duration-300 hover:scale-110 hover:bg-background/80 hover:border-royal-300 dark:hover:border-royal-700"
+                  >
+                    <LinkIcon className="h-4 w-4 transition-transform hover:rotate-12 duration-200" />
+                  </Button>
+                </div>
+              </DialogHeader>
+
+              {selectedProject.videoUrl && (
+                <div className="aspect-video w-full rounded-lg overflow-hidden mb-4">
+                  <iframe
+                    src={selectedProject.videoUrl}
+                    title={`${selectedProject.title} demo`}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="w-full h-full"
+                  />
+                </div>
+              )}
+
+              {selectedProject.images?.length && (
+                <div className="relative w-full h-64 mb-4">
+                  <Image
+                    src={getCurrentImageSrc()}
+                    alt={selectedProject.title}
+                    fill
+                    className="object-contain rounded-lg"
+                  />
+                  {selectedProject.images.length > 1 && (
+                    <>
+                      <button
+                        onClick={prevImage}
+                        className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-1"
+                      >
+                        <ChevronLeft className="h-5 w-5" />
+                      </button>
+                      <button
+                        onClick={nextImage}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-1"
+                      >
+                        <ChevronRight className="h-5 w-5" />
+                      </button>
+                    </>
+                  )}
+                </div>
+              )}
+
+              <div className="prose dark:prose-invert max-w-none mb-4">
+                <p
+                  className="whitespace-pre-line"
+                  dangerouslySetInnerHTML={{ __html: selectedProject.detailedDescription || "" }}
+                />
+              </div>
+
+              <div className="flex flex-wrap gap-2 mb-4">
+                {selectedProject.tags.map((tag) => (
+                  <Badge key={tag} className={`text-xs ${getTagStyles(tag, selectedProject)}`}>
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+
+              <div className="flex flex-col gap-3">
+                {selectedProject.githubLink && (
+                  <Button asChild variant="outline" className="w-full border-royal-300 dark:border-royal-700">
+                    <a href={selectedProject.githubLink} target="_blank" rel="noopener noreferrer">
+                      <Github className="mr-2 h-4 w-4" />
+                      View Code
+                    </a>
+                  </Button>
+                )}
+                {selectedProject.devpostLink && (
+                  <Button asChild variant="outline" className="w-full border-royal-300 dark:border-royal-700">
+                    <a href={selectedProject.devpostLink} target="_blank" rel="noopener noreferrer">
+                      <span className="mr-2 font-bold text-blue-500">D</span>
+                      View on Devpost
+                    </a>
+                  </Button>
+                )}
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+    </>
+  )
+}
+
+// Main component with Suspense boundary
+export default function Projects() {
+  return (
     <section id="projects" className="py-16 md:py-20 px-4 bg-muted/50 relative overflow-hidden">
       {/* background decorations */}
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-royal-500 to-transparent" />
@@ -691,218 +888,10 @@ export default function Projects() {
           Here are some of my recent projects. Each one was built with care and attention to detail.
         </motion.p>
 
-        <motion.div
-          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          variants={{ hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.2 } } }}
-        >
-          {projects.map((project) => (
-            <motion.div
-              key={project.id}
-              variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
-            >
-              <Card className="overflow-hidden flex flex-col h-full group transition-shadow hover:shadow-xl border-transparent hover:border-royal-200 dark:hover:border-royal-800">
-                <div className="relative h-40 sm:h-48 w-full overflow-hidden">
-                  <Image
-                    src={project.thumbnail || "/placeholder.svg"}
-                    alt={project.title}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </div>
-                <CardHeader className="p-4 md:p-6">
-                  <CardTitle className="text-lg md:text-xl group-hover:text-royal-600 dark:group-hover:text-royal-400 transition-colors">
-                    {project.title}
-                  </CardTitle>
-                  <CardDescription className="text-sm md:text-base">{project.description}</CardDescription>
-                </CardHeader>
-                <CardContent className="flex-grow p-4 md:p-6 pt-0">
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {project.tags.slice(0, 3).map((tag) => (
-                      <Badge key={tag} className={`text-xs ${getTagStyles(tag, project)}`}>
-                        {tag}
-                      </Badge>
-                    ))}
-                    {project.tags.length > 3 && (
-                      <Badge className="text-xs bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200">
-                        +{project.tags.length - 3} more
-                      </Badge>
-                    )}
-                  </div>
-                </CardContent>
-                <CardFooter className="flex justify-between p-4 md:p-6 pt-0">
-
-                {project.devpostLink ? (
-                      <Button
-                        asChild
-                        variant="outline"
-                        size={isMobile ? "sm" : "default"}
-                        className="transition-all duration-300 hover:scale-105 hover:bg-background/80 hover:border-royal-300 dark:hover:border-royal-700 group"
-                      >
-                        <a href={project.devpostLink} target="_blank" rel="noopener noreferrer">
-                          <span className="mr-2 font-bold text-blue-500">D</span>
-                          <span>Devpost</span>
-                        </a>
-                      </Button>
-                    ) : project.githubLink ? (
-                      <Button
-                        asChild
-                        variant="outline"
-                        size={isMobile ? "sm" : "default"}
-                        className="transition-all duration-300 hover:scale-105 hover:bg-background/80 hover:border-royal-300 dark:hover:border-royal-700 group"
-                      >
-                        <a href={project.githubLink} target="_blank" rel="noopener noreferrer">
-                          <Github className="mr-2 h-4 w-4 transition-transform group-hover:rotate-12 duration-200" />
-                          <span>Code</span>
-                        </a>
-                      </Button>
-                    ) : (
-                      <div />
-                    )}
-                  <Button
-                    size={isMobile ? "sm" : "default"}
-                    className="bg-gradient-to-r from-royal-500 to-royal-700 hover:from-royal-600 hover:to-royal-800 border-0 
-                    transition-all duration-300 hover:scale-105 hover:shadow-md hover:shadow-royal-500/20 
-                    dark:hover:shadow-royal-700/20 relative overflow-hidden group"
-                    onClick={() => handleProjectDetails(project)}
-                  >
-                    <span
-                      className="absolute inset-0 w-full h-full bg-gradient-to-r from-royal-400/0 via-white/10 to-royal-400/0 
-                    transform -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"
-                    ></span>
-                    <Info className="mr-2 h-4 w-4 transition-transform group-hover:rotate-12 duration-200" />
-                    <span className="relative z-10">Details</span>
-                  </Button>
-                </CardFooter>
-              </Card>
-            </motion.div>
-          ))}
-        </motion.div>
+        <Suspense fallback={<div className="text-center py-10">Loading projects...</div>}>
+          <ProjectsContent />
+        </Suspense>
       </div>
-
-      {/* DETAILS DIALOG - Modified to prevent particle network issues */}
-      <Dialog open={isDialogOpen} onOpenChange={(open) => !open && handleCloseDialog()}>
-        <DialogContent
-          className="max-w-3xl max-h-[90vh] overflow-y-auto p-4 md:p-6"
-          // Add this to ensure dialog doesn't affect parent DOM structure
-          onPointerDownOutside={(e) => {
-            e.preventDefault()
-            handleCloseDialog()
-          }}
-        >
-          {selectedProject && (
-            <>
-              <DialogHeader className="mb-4">
-                <div className="flex items-center justify-center">
-                  <DialogTitle className="text-xl md:text-2xl">{selectedProject.title}</DialogTitle>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={copyShareLink}
-                    title="Copy link"
-                    className="rounded-full transition-all duration-300 hover:scale-110 hover:bg-background/80 
-      hover:border-royal-300 dark:hover:border-royal-700 ml-2"
-                  >
-                    <LinkIcon className="h-4 w-4 transition-transform hover:rotate-12 duration-200" />
-                  </Button>
-                </div>
-              </DialogHeader>
-
-              {/* Optional video - now placed above the image */}
-              {selectedProject.videoUrl && (
-                <div className="aspect-video w-full rounded-lg overflow-hidden mb-4">
-                  <iframe
-                    src={selectedProject.videoUrl}
-                    title={`${selectedProject.title} demo`}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="w-full h-full"
-                  />
-                </div>
-              )}
-
-              {/* Image carousel - only show if project has additional images */}
-              {selectedProject.images && selectedProject.images.length > 0 && (
-                <div className="relative w-full h-64 mb-4">
-                  <Image
-                    src={getCurrentImageSrc() || "/placeholder.svg"}
-                    alt={`${selectedProject.title}`}
-                    fill
-                    className="object-contain rounded-lg"
-                  />
-                  {selectedProject.images.length > 1 && (
-                    <>
-                      <button
-                        onClick={prevImage}
-                        className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-1"
-                      >
-                        <ChevronLeft className="h-5 w-5" />
-                      </button>
-                      <button
-                        onClick={nextImage}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-1"
-                      >
-                        <ChevronRight className="h-5 w-5" />
-                      </button>
-                    </>
-                  )}
-                </div>
-              )}
-
-              {/* Description */}
-              <div className="prose dark:prose-invert max-w-none mb-4">
-                <p
-                  className="whitespace-pre-line"
-                  dangerouslySetInnerHTML={{ __html: selectedProject.detailedDescription || "" }}
-                ></p>
-              </div>
-
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2">
-                {selectedProject.tags.map((tag) => (
-                  <Badge key={tag} className={`text-xs ${getTagStyles(tag, selectedProject)}`}>
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-
-              {/* Links */}
-              <div className="flex flex-col gap-3 mt-4">
-                {selectedProject.githubLink && (
-                  <Button
-                    asChild
-                    variant="outline"
-                    className="w-full border-royal-300 dark:border-royal-700 transition-all duration-300 
-                    hover:scale-105 hover:bg-background/80 group"
-                  >
-                    <a href={selectedProject.githubLink} target="_blank" rel="noopener noreferrer">
-                      <Github className="mr-2 h-4 w-4 transition-transform group-hover:rotate-12 duration-200" />
-                      <span>View Code</span>
-                    </a>
-                  </Button>
-                )}
-                {selectedProject.devpostLink && (
-                  <Button
-                    asChild
-                    variant="outline"
-                    className="w-full border-royal-300 dark:border-royal-700 transition-all duration-300 
-                    hover:scale-105 hover:bg-background/80 group"
-                  >
-                    <a href={selectedProject.devpostLink} target="_blank" rel="noopener noreferrer">
-                      <span className="mr-2 font-bold text-blue-500">D</span>
-                      <span>View on Devpost</span>
-                    </a>
-                  </Button>
-                )}
-              </div>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
     </section>
   )
 }
