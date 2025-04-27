@@ -66,7 +66,6 @@ export default function Contact() {
                 {/* FormSubmit configuration */}
                 <input type="hidden" name="_subject" value="New message from your portfolio!" />
                 <input type="hidden" name="_template" value="table" />
-                {/* Remove _captcha=false to enable FormSubmit's built-in captcha */}
                 <input
                   type="hidden"
                   name="_next"
@@ -104,7 +103,7 @@ export default function Contact() {
                 </Button>
 
                 <p className="text-xs text-muted-foreground text-center mt-2">
-                  This site is protected by FormSubmit's default captcha.
+                  Protected by reCAPTCHA.
                 </p>
               </form>
             </CardContent>
