@@ -28,7 +28,7 @@ export default function Resume() {
     {
       icon: <Briefcase className="h-10 w-10 text-royal-500" />,
       title: "Work Experience",
-      description: "WIP",
+      description: "1 year of professional experience in full-stack software development",
     },
     {
       icon: <GraduationCap className="h-10 w-10 text-royal-500" />,

@@ -19,11 +19,12 @@ interface Project {
   slug: string
   title: string
   description: string
-  thumbnail: string // Thumbnail image for the card
-  images?: string[] // Optional additional images for the carousel
+  thumbnail: string
+  images?: string[]
   tags: string[]
   tagColors: Record<string, string>
-  githubLink?: string // Now optional
+  githubLink?: string
+  devpostLink?: string
   detailedDescription?: string
   videoUrl?: string
 }
@@ -206,6 +207,158 @@ const tagColorMap: Record<string, any> = {
     hover: "hover:bg-gray-200",
     hoverDark: "dark:hover:bg-gray-700",
   },
+  openai: {
+    bg: "bg-green-100",
+    bgDark: "dark:bg-green-900/50",
+    text: "text-green-800",
+    textDark: "dark:text-green-200",
+    hover: "hover:bg-green-200",
+    hoverDark: "dark:hover:bg-green-800",
+  },
+  tesseract: {
+    bg: "bg-blue-100",
+    bgDark: "dark:bg-blue-900/50",
+    text: "text-blue-800",
+    textDark: "dark:text-blue-200",
+    hover: "hover:bg-blue-200",
+    hoverDark: "dark:hover:bg-blue-800",
+  },
+  googlemaps: {
+    bg: "bg-red-100",
+    bgDark: "dark:bg-red-900/50",
+    text: "text-red-800",
+    textDark: "dark:text-red-200",
+    hover: "hover:bg-red-200",
+    hoverDark: "dark:hover:bg-red-800",
+  },
+  tidio: {
+    bg: "bg-blue-100",
+    bgDark: "dark:bg-blue-900/50",
+    text: "text-blue-800",
+    textDark: "dark:text-blue-200",
+    hover: "hover:bg-blue-200",
+    hoverDark: "dark:hover:bg-blue-800",
+  },
+  flarum: {
+    bg: "bg-orange-100",
+    bgDark: "dark:bg-orange-900/50",
+    text: "text-orange-800",
+    textDark: "dark:text-orange-200",
+    hover: "hover:bg-orange-200",
+    hoverDark: "dark:hover:bg-orange-800",
+  },
+  sqlite: {
+    bg: "bg-blue-100",
+    bgDark: "dark:bg-blue-900/50",
+    text: "text-blue-800",
+    textDark: "dark:text-blue-200",
+    hover: "hover:bg-blue-200",
+    hoverDark: "dark:hover:bg-blue-800",
+  },
+  cpp: {
+    bg: "bg-blue-100",
+    bgDark: "dark:bg-blue-900/50",
+    text: "text-blue-800",
+    textDark: "dark:text-blue-200",
+    hover: "hover:bg-blue-200",
+    hoverDark: "dark:hover:bg-blue-800",
+  },
+  ai: {
+    bg: "bg-purple-100",
+    bgDark: "dark:bg-purple-900/50",
+    text: "text-purple-800",
+    textDark: "dark:text-purple-200",
+    hover: "hover:bg-purple-200",
+    hoverDark: "dark:hover:bg-purple-800",
+  },
+  gamedev: {
+    bg: "bg-red-100",
+    bgDark: "dark:bg-red-900/50",
+    text: "text-red-800",
+    textDark: "dark:text-red-200",
+    hover: "hover:bg-red-200",
+    hoverDark: "dark:hover:bg-red-800",
+  },
+  starcraft: {
+    bg: "bg-indigo-100",
+    bgDark: "dark:bg-indigo-900/50",
+    text: "text-indigo-800",
+    textDark: "dark:text-indigo-200",
+    hover: "hover:bg-indigo-200",
+    hoverDark: "dark:hover:bg-indigo-800",
+  },
+  sc2api: {
+    bg: "bg-purple-100",
+    bgDark: "dark:bg-purple-900/50",
+    text: "text-purple-800",
+    textDark: "dark:text-purple-200",
+    hover: "hover:bg-purple-200",
+    hoverDark: "dark:hover:bg-purple-800",
+  },
+  java: {
+    bg: "bg-orange-100",
+    bgDark: "dark:bg-orange-900/50",
+    text: "text-orange-800",
+    textDark: "dark:text-orange-200",
+    hover: "hover:bg-orange-200",
+    hoverDark: "dark:hover:bg-orange-800",
+  },
+  android: {
+    bg: "bg-green-100",
+    bgDark: "dark:bg-green-900/50",
+    text: "text-green-800",
+    textDark: "dark:text-green-200",
+    hover: "hover:bg-green-200",
+    hoverDark: "dark:hover:bg-green-800",
+  },
+  gradle: {
+    bg: "bg-blue-100",
+    bgDark: "dark:bg-blue-900/50",
+    text: "text-blue-800",
+    textDark: "dark:text-blue-200",
+    hover: "hover:bg-blue-200",
+    hoverDark: "dark:hover:bg-blue-800",
+  },
+  kotlin: {
+    bg: "bg-purple-100",
+    bgDark: "dark:bg-purple-900/50",
+    text: "text-purple-800",
+    textDark: "dark:text-purple-200",
+    hover: "hover:bg-purple-200",
+    hoverDark: "dark:hover:bg-purple-800",
+  },
+  xml: {
+    bg: "bg-gray-100",
+    bgDark: "dark:bg-gray-800",
+    text: "text-gray-800",
+    textDark: "dark:text-gray-200",
+    hover: "hover:bg-gray-200",
+    hoverDark: "dark:hover:bg-gray-700",
+  },
+  agile: {
+    bg: "bg-cyan-100",
+    bgDark: "dark:bg-cyan-900/50",
+    text: "text-cyan-800",
+    textDark: "dark:text-cyan-200",
+    hover: "hover:bg-cyan-200",
+    hoverDark: "dark:hover:bg-cyan-800",
+  },
+  cicd: {
+    bg: "bg-indigo-100",
+    bgDark: "dark:bg-indigo-900/50",
+    text: "text-indigo-800",
+    textDark: "dark:text-indigo-200",
+    hover: "hover:bg-indigo-200",
+    hoverDark: "dark:hover:bg-indigo-800",
+  },
+  github: {
+    bg: "bg-gray-100",
+    bgDark: "dark:bg-gray-800",
+    text: "text-gray-800",
+    textDark: "dark:text-gray-200",
+    hover: "hover:bg-gray-200",
+    hoverDark: "dark:hover:bg-gray-700",
+  },
 }
 
 // --- Static project data ---
@@ -215,12 +368,8 @@ const projects: Project[] = [
     slug: "portfolio-website",
     title: "Portfolio Website",
     description: "A modern, responsive portfolio website built with Next.js and interactive features.",
-    thumbnail: "/placeholder.svg?height=300&width=500&text=Portfolio+Website",
-    images: [
-      "/placeholder.svg?height=300&width=500&text=Dark+Mode",
-      "/placeholder.svg?height=300&width=500&text=Particle+Network",
-      "/placeholder.svg?height=300&width=500&text=Project+Details",
-    ],
+    thumbnail: "Portfolio-Website/thumbnail.png",
+    images: [],
     tags: [
       "Next.js",
       "React",
@@ -241,7 +390,7 @@ const projects: Project[] = [
       "Responsive Design": "default",
       "Dark Mode": "default",
     },
-    githubLink: "#",
+    githubLink: "https://github.com/YuHuaiCui/portfolio",
     detailedDescription:
       "This portfolio website showcases my projects and skills using modern web technologies. Built with Next.js and React, it features a responsive design that works seamlessly across all devices. The site includes interactive elements like the particle network animation on the home page, smooth scrolling transitions, and dynamic project cards.\n\n" +
       "Key features include:\n" +
@@ -256,15 +405,12 @@ const projects: Project[] = [
   },
   {
     id: 1,
-    slug: "ecommerce-platform",
-    title: "E‑Commerce Platform",
+    slug: "competition-scoring-platform",
+    title: "Competition Scoring Platform",
     description:
-      "A full‑stack e‑commerce platform with product management, cart functionality, and payment processing.",
-    thumbnail: "/placeholder.svg?height=300&width=500",
-    images: [
-      "/placeholder.svg?height=300&width=500&text=Product+Page",
-      "/placeholder.svg?height=300&width=500&text=Checkout",
-    ],
+      "A full-stack platform for a non-profit to organization to score and judge their environmental competitions",
+    thumbnail: "AlbertaEnvirothon/thumbnail.png",
+    images: [],
     tags: [
       "TypeScript",
       "React",
@@ -289,38 +435,141 @@ const projects: Project[] = [
       "Django REST Framework": "djangorest",
       WebSockets: "websockets",
     },
-    githubLink: "#",
+    githubLink: "",
     detailedDescription:
-      "This comprehensive e‑commerce platform features a responsive design, user authentication, product catalog with filtering and search, shopping cart functionality, secure checkout with Stripe integration, order history, and an admin dashboard for product and order management. Built with React and TypeScript for the frontend, Django and Python for the backend, and PostgreSQL for the database. Real-time features are implemented using WebSockets, and the entire application is containerized with Docker for easy deployment.",
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      "This comprehensive scoring platform features a responsive design, user authentication, user role manaagement, live score monitoring, team and test filtering, and an admin dashboard for event management. Built with React and TypeScript for the frontend, Django and Python for the backend, and PostgreSQL for the database. Real-time features are implemented using WebSockets, and the entire application is containerized with Docker for easy deployment.",
+    videoUrl: "AlbertaEnvirothon/demo.mp4",
   },
   {
     id: 2,
-    slug: "task-management",
-    title: "Task Management App",
-    description: "A collaborative task management application with real‑time updates and team functionality.",
-    thumbnail: "/placeholder.svg?height=300&width=500",
-    tags: ["Next.js", "Firebase", "Tailwind CSS"],
-    tagColors: { "Next.js": "nextjs", Firebase: "firebase", "Tailwind CSS": "tailwind" },
-    // No githubLink for this project
+    slug: "uedbot",
+    title: "UEDBot - StarCraft II Bot",
+    description:
+      "A high-performance Terran StarCraft 2 bot built in C++ with advanced strategies and tournament success.",
+    thumbnail: "UEDBot/thumbnail.png",
+    images: [],
+    tags: ["C++", "SC2API", "AI", "Game Development", "StarCraft 2", "Competitive Bot"],
+    tagColors: {
+      "C++": "cpp",
+      SC2API: "sc2api",
+      AI: "ai",
+      "Game Development": "gamedev",
+      "StarCraft 2": "starcraft",
+      "Competitive Bot": "default",
+    },
+    githubLink: "https://github.com/Team-UED/UEDBot",
     detailedDescription:
-      "A task management application that allows teams to collaborate in real‑time. Features include task creation and assignment, due dates, priority levels, comments, file attachments, and real‑time notifications. The app uses Next.js for the frontend, Firebase for real‑time database and authentication, and Tailwind CSS for styling.",
+      "<p>UEDBot claimed 1st place in a tournament of 11 StarCraft II bots, finishing undefeated with a record of 57 wins, 3 draws, and 0 losses.</p>" +
+      "<ul>\n" +
+      "  <li><strong>Dynamic Ramp Blocking</strong><br />" +
+      "    UEDBot blocks key ramps with Supply Depots and a Barracks for early-game defense, preventing enemy units from advancing." +
+      "  </li>\n" +
+      "  <li><strong>Optimized Resource Collection</strong><br />" +
+      "    UEDBot uses SCVs and Mules effectively for fast and efficient mineral and gas collection, ensuring a steady economic advantage." +
+      "  </li>\n" +
+      "  <li><strong>Unit Kiting</strong><br />" +
+      "    Inspired by professional play, UEDBot employs advanced kiting tactics with Marines and Battlecruisers to minimize damage while engaging enemies." +
+      "  </li>\n" +
+      "  <li><strong>Super Fast Rush Attack with Battlecruiser Teleport</strong><br />" +
+      "    UEDBot teleports a Battlecruiser to the enemy base before the 5-minute 30-second mark, followed by reinforcements of Marines and Siege Tanks for relentless pressure." +
+      "  </li>\n" +
+      "  <li><strong>Mixed Defense with Marines, Siege Tanks, and Missile Turrets</strong><br />" +
+      "    UEDBot uses Marines and Siege Tanks for defense while expanding its base with Missile Turrets to counter air threats in later stages." +
+      "  </li>" +
+      "</ul>",
+    videoUrl: "UEDBot/demo.mp4"
   },
   {
     id: 3,
-    slug: "weather-dashboard",
-    title: "Weather Dashboard",
+    slug: "pillpal",
+    title: "PillPal - Medication Platform",
     description: "A weather dashboard that displays current and forecasted weather data for multiple locations.",
     thumbnail: "/placeholder.svg?height=300&width=500",
     images: [
       "/placeholder.svg?height=300&width=500&text=Forecast+View",
       "/placeholder.svg?height=300&width=500&text=Location+Search",
     ],
-    tags: ["JavaScript", "Weather API", "Chart.js"],
-    tagColors: { JavaScript: "javascript", "Weather API": "api", "Chart.js": "chart" },
+    tags: [
+      "Next.js",
+      "Django",
+      "SQLite",
+      "TypeScript",
+      "Django REST Framework",
+      "OpenAI API",
+      "Tesseract",
+      "Google Maps API",
+      "Tidio",
+      "Flarum",
+    ],
+    tagColors: {
+      "Next.js": "nextjs",
+      Django: "django",
+      "Django REST Framework": "djangorest",
+      TypeScript: "typescript",
+      SQLite: "sqlite",
+      "OpenAI API": "openai",
+      Tesseract: "tesseract",
+      "Google Maps API": "googlemaps",
+      Tidio: "tidio",
+      Flarum: "flarum",
+    },
+    githubLink: "https://github.com/peterzdhuang/PillPal",
+    devpostLink: "https://devpost.com/software/pillpal-pzx5jo",
+    detailedDescription:
+      "PillPall is a full-stack hackathon prototype that simplifies medication management and fosters community support. It offers schedule tracking with reminders, a Flarum-powered forum, caretaker access, live pharmacy mapping, OCR label scanning (OpenAI/Tesseract.js) and an integrated Tidio chatbot—all built with Next.js, Django, SQLite, Docker and WebSockets.",
+  },
+  {
+    id: 4,
+    slug: "android-app",
+    title: "Mobile Navigation App",
+    description:
+      "A collaborative Android application developed using Agile methodologies with integrated mapping and location services.",
+    thumbnail: "/placeholder.svg?height=300&width=500&text=Android+App",
+    images: [
+      "/placeholder.svg?height=300&width=500&text=App+Interface",
+      "/placeholder.svg?height=300&width=500&text=Map+Integration",
+      "/placeholder.svg?height=300&width=500&text=Team+Collaboration",
+    ],
+    tags: [
+      "Java",
+      "Android",
+      "Gradle",
+      "Kotlin",
+      "Google Maps API",
+      "Material-UI",
+      "XML",
+      "Agile",
+      "CI/CD",
+      "GitHub Actions",
+    ],
+    tagColors: {
+      Java: "java",
+      Android: "android",
+      Gradle: "gradle",
+      Kotlin: "kotlin",
+      "Google Maps API": "googlemaps",
+      "Material-UI": "materialui",
+      XML: "xml",
+      Agile: "agile",
+      "CI/CD": "cicd",
+      "GitHub Actions": "github",
+    },
     githubLink: "#",
     detailedDescription:
-      "A weather dashboard application that provides current weather conditions and forecasts for multiple locations. Features include location search, 7‑day forecasts, hourly breakdowns, weather maps, and customizable units. The app uses vanilla JavaScript with the OpenWeather API and Chart.js for data visualization.",
+      "This Android application was developed as part of a collaborative team project involving 5 developers working across 4 sprints, each lasting 2-3 weeks. The app provides users with advanced navigation capabilities and location-based services through integration with Google Maps API.\n\n" +
+      "Technical Stack:\n" +
+      "• Java - Primary programming language for app logic and functionality\n" +
+      "• Android Studio - IDE used for development and testing\n" +
+      "• Gradle (with Kotlin DSL) - Build system for dependency management and compilation\n" +
+      "• Google Maps API - Integration for mapping and location services\n" +
+      "• Material-UI - Framework for implementing Google's Material Design\n" +
+      "• XML - Used for layout design and UI component structuring\n\n" +
+      "Development Process:\n" +
+      "• Agile Methodology - Implemented Scrum with regular sprint planning, daily standups, and retrospectives\n" +
+      "• CI/CD Pipeline - Automated build, test, and deployment processes\n" +
+      "• GitHub Actions - Automated testing and documentation generation\n" +
+      "• Javadoc - Automatic documentation generation deployed to GitHub Pages\n\n" +
+      "This project demonstrates not only technical proficiency in Android development but also experience with collaborative software development practices, version control, and automated testing and documentation. The team successfully delivered a functional, well-documented application through structured sprints and effective collaboration.",
   },
 ]
 
@@ -481,23 +730,34 @@ export default function Projects() {
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-between p-4 md:p-6 pt-0">
-                  {/* Only show GitHub button if githubLink exists */}
-                  {project.githubLink ? (
-                    <Button
-                      asChild
-                      variant="outline"
-                      size={isMobile ? "sm" : "default"}
-                      className="transition-all duration-300 hover:scale-105 hover:bg-background/80 hover:border-royal-300 
-                      dark:hover:border-royal-700 group"
-                    >
-                      <a href={project.githubLink} target="_blank" rel="noopener noreferrer">
-                        <Github className="mr-2 h-4 w-4 transition-transform group-hover:rotate-12 duration-200" />
-                        <span>Code</span>
-                      </a>
-                    </Button>
-                  ) : (
-                    <div></div> // Empty div to maintain flex layout
-                  )}
+
+                {project.devpostLink ? (
+                      <Button
+                        asChild
+                        variant="outline"
+                        size={isMobile ? "sm" : "default"}
+                        className="transition-all duration-300 hover:scale-105 hover:bg-background/80 hover:border-royal-300 dark:hover:border-royal-700 group"
+                      >
+                        <a href={project.devpostLink} target="_blank" rel="noopener noreferrer">
+                          <span className="mr-2 font-bold text-blue-500">D</span>
+                          <span>Devpost</span>
+                        </a>
+                      </Button>
+                    ) : (
+                      project.githubLink && (
+                        <Button
+                          asChild
+                          variant="outline"
+                          size={isMobile ? "sm" : "default"}
+                          className="transition-all duration-300 hover:scale-105 hover:bg-background/80 hover:border-royal-300 dark:hover:border-royal-700 group"
+                        >
+                          <a href={project.githubLink} target="_blank" rel="noopener noreferrer">
+                            <Github className="mr-2 h-4 w-4 transition-transform group-hover:rotate-12 duration-200" />
+                            <span>Code</span>
+                          </a>
+                        </Button>
+                      )
+                    )}
                   <Button
                     size={isMobile ? "sm" : "default"}
                     className="bg-gradient-to-r from-royal-500 to-royal-700 hover:from-royal-600 hover:to-royal-800 border-0 
@@ -591,7 +851,10 @@ export default function Projects() {
 
               {/* Description */}
               <div className="prose dark:prose-invert max-w-none mb-4">
-                <p className="whitespace-pre-line">{selectedProject.detailedDescription}</p>
+                <p
+                  className="whitespace-pre-line"
+                  dangerouslySetInnerHTML={{ __html: selectedProject.detailedDescription || "" }}
+                ></p>
               </div>
 
               {/* Tags */}
@@ -603,20 +866,35 @@ export default function Projects() {
                 ))}
               </div>
 
-              {/* Only show GitHub button if githubLink exists */}
-              {selectedProject.githubLink && (
-                <Button
-                  asChild
-                  variant="outline"
-                  className="border-royal-300 dark:border-royal-700 transition-all duration-300 
-                  hover:scale-105 hover:bg-background/80 group"
-                >
-                  <a href={selectedProject.githubLink} target="_blank" rel="noopener noreferrer">
-                    <Github className="mr-2 h-4 w-4 transition-transform group-hover:rotate-12 duration-200" />
-                    <span>View Code</span>
-                  </a>
-                </Button>
-              )}
+              {/* Links */}
+              <div className="flex flex-col gap-3 mt-4">
+                {selectedProject.githubLink && (
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="w-full border-royal-300 dark:border-royal-700 transition-all duration-300 
+                    hover:scale-105 hover:bg-background/80 group"
+                  >
+                    <a href={selectedProject.githubLink} target="_blank" rel="noopener noreferrer">
+                      <Github className="mr-2 h-4 w-4 transition-transform group-hover:rotate-12 duration-200" />
+                      <span>View Code</span>
+                    </a>
+                  </Button>
+                )}
+                {selectedProject.devpostLink && (
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="w-full border-royal-300 dark:border-royal-700 transition-all duration-300 
+                    hover:scale-105 hover:bg-background/80 group"
+                  >
+                    <a href={selectedProject.devpostLink} target="_blank" rel="noopener noreferrer">
+                      <span className="mr-2 font-bold text-blue-500">D</span>
+                      <span>View on Devpost</span>
+                    </a>
+                  </Button>
+                )}
+              </div>
             </>
           )}
         </DialogContent>

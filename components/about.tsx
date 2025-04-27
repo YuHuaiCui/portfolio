@@ -10,20 +10,21 @@ export default function About() {
         <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-8 md:mb-12">About Me</h2>
         <div className="grid md:grid-cols-2 gap-8 md:gap-10 items-center">
           <motion.div
-            className="relative aspect-square max-w-xs mx-auto group"
+            className="relative w-[400px] h-[400px] mx-auto group"
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
             <div className="absolute -inset-1 bg-gradient-to-r from-royal-500 to-royal-700 rounded-xl opacity-75 group-hover:opacity-100 transition duration-300 blur"></div>
-            <Image
-              src="/placeholder.svg?height=400&width=400"
-              alt="Profile"
-              width={400}
-              height={400}
-              className="rounded-xl shadow-lg object-cover relative"
-            />
+            <div className="relative w-full h-full rounded-xl overflow-hidden shadow-lg">
+              <Image
+                src="me.jpg"
+                alt="Profile"
+                fill
+                className="object-cover object-center"
+              />
+            </div>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, x: 50 }}
@@ -33,7 +34,7 @@ export default function About() {
           >
             <h3 className="text-xl md:text-2xl font-semibold mb-4">Who I Am</h3>
             <p className="text-muted-foreground mb-4 md:mb-6">
-              I'm a passionate developer with a strong focus on creating efficient, functional, and user-friendly
+              I'm a passionate developer with a strong focus on creating beautiful, functional, and user-friendly
               applications. With several years of experience in software development, I enjoy turning complex problems into
               simple, elegant solutions.
             </p>

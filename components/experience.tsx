@@ -144,7 +144,7 @@ const skillColorMap: Record<
 export default function Experience() {
   const experiences = [
     {
-      id: 1,
+      id: 0,
       role: "Game Engine Developer",
       company: "University of Alberta",
       period: "Summer 2025",
@@ -159,7 +159,7 @@ export default function Experience() {
       },
     },
     {
-      id: 2,
+      id: 1,
       role: "Backend Developer",
       company: "Alberta Envirothon",
       period: "Jan 2025 - Apr 2025",

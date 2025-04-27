@@ -12,10 +12,7 @@ export default function Home() {
   return (
     <main className="min-h-screen w-full">
       <Navbar />
-
-      {/* Drop the extra #home wrapper here */}
       <Hero />
-
       <About />
       <Skills />
       <Projects />
