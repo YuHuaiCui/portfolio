@@ -174,7 +174,7 @@ export default function Experience() {
       period: "Jan 2025 - Apr 2025",
       location: "Alberta, Canada",
       description:
-        "I maintained the PostgreSQL database, managed the deployment service, and fixed technical issues with the platform to ensure the website ran smoothly for the competition.",
+        "Developed and optimized Django RESTful APIs, set up Simple JWT authentication, and resolved platform issues to ensure seamless integration with the frontend team.",
       skills: ["Django", "Python", "PostgreSQL", "Docker", "Git"],
       skillColors: {
         Django: "django",
