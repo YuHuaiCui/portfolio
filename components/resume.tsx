@@ -73,7 +73,7 @@ export default function Resume() {
         // Create a temporary link and trigger download
         const link = document.createElement("a")
         link.href = result.downloadUrl
-        link.download = "YourName_Resume.pdf"
+        link.download = "DanielCui_Resume.pdf"
         document.body.appendChild(link)
         link.click()
         document.body.removeChild(link)
@@ -179,7 +179,7 @@ export default function Resume() {
                     className="transition-all duration-300 hover:scale-105 hover:bg-background/80 hover:border-royal-300 
   dark:hover:border-royal-700 group"
                   >
-                    <Link href="/resume.pdf" target="_blank" rel="noopener noreferrer">
+                    <Link href="/DanielCui_Resume.pdf" target="_blank" rel="noopener noreferrer">
                       <Eye className="mr-2 h-4 w-4 transition-transform group-hover:rotate-12 duration-200" />
                       <span>View Online</span>
                     </Link>

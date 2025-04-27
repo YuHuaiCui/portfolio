@@ -1,6 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import type React from "react"
+
+import { useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -8,7 +10,6 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { AlertCircle, CheckCircle2, Loader2 } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { sendContactForm } from "@/app/actions"
 import { motion } from "framer-motion"
 import { useRecaptcha } from "@/hooks/use-recaptcha"
 
@@ -18,10 +19,12 @@ export default function Contact() {
     success?: boolean
     message?: string
   } | null>(null)
+  const formRef = useRef<HTMLFormElement>(null)
 
   const { executeRecaptcha, isLoading: isRecaptchaLoading } = useRecaptcha("contact_form")
 
-  async function handleSubmit(formData: FormData) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
     setIsSubmitting(true)
     setFormStatus(null)
 
@@ -29,14 +32,32 @@ export default function Contact() {
       // Execute reCAPTCHA and get token
       const token = await executeRecaptcha()
 
-      // Add token to form data
-      formData.append("recaptchaToken", token || "")
+      if (!token) {
+        setFormStatus({
+          success: false,
+          message: "reCAPTCHA verification failed. Please try again.",
+        })
+        return
+      }
 
-      const result = await sendContactForm(formData)
+      // Add the token to a hidden field in the form
+      const recaptchaInput = document.createElement("input")
+      recaptchaInput.type = "hidden"
+      recaptchaInput.name = "g-recaptcha-response"
+      recaptchaInput.value = token
+      formRef.current?.appendChild(recaptchaInput)
+
+      // Submit the form
+      formRef.current?.submit()
+
+      // Show success message
       setFormStatus({
-        success: result.success,
-        message: result.message,
+        success: true,
+        message: "Thank you for your message! I'll get back to you soon.",
       })
+
+      // Reset the form
+      formRef.current?.reset()
     } catch (error) {
       setFormStatus({
         success: false,
@@ -102,7 +123,22 @@ export default function Contact() {
                   <AlertDescription>{formStatus.message}</AlertDescription>
                 </Alert>
               )}
-              <form action={handleSubmit} className="space-y-6">
+
+              {/* FormSubmit form */}
+              <form
+                ref={formRef}
+                onSubmit={handleSubmit}
+                action="https://formsubmit.co/hello@dcui.dev"
+                method="POST"
+                className="space-y-6"
+              >
+                {/* FormSubmit configuration */}
+                <input type="hidden" name="_subject" value="New message from your portfolio!" />
+                <input type="hidden" name="_template" value="table" />
+                <input type="hidden" name="_captcha" value="false" /> {/* We're using our own reCAPTCHA */}
+                <input type="hidden" name="_next" value={typeof window !== "undefined" ? window.location.href : ""} />
+                {/* Honeypot field to prevent spam */}
+                <input type="text" name="_honey" style={{ display: "none" }} />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Name</Label>
