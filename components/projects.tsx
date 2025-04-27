@@ -438,7 +438,7 @@ const projects: Project[] = [
     githubLink: "",
     detailedDescription:
       "This comprehensive scoring platform features a responsive design, user authentication, user role manaagement, live score monitoring, team and test filtering, and an admin dashboard for event management. Built with React and TypeScript for the frontend, Django and Python for the backend, and PostgreSQL for the database. Real-time features are implemented using WebSockets, and the entire application is containerized with Docker for easy deployment.",
-    videoUrl: "AlbertaEnvirothon/demo.mp4",
+    videoUrl: "https://www.youtube-nocookie.com/embed/dWOw3RGN1Rw",
   },
   {
     id: 2,
@@ -790,7 +790,7 @@ function ProjectsContent() {
                 </div>
               )}
 
-              {selectedProject.images?.length && (
+              {selectedProject.images?.length > 0 && (
                 <div className="relative w-full h-64 mb-4">
                   <Image
                     src={getCurrentImageSrc()}
