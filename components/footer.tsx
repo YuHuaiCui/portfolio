@@ -23,10 +23,6 @@ export default function Footer() {
                 <Linkedin className="h-6 w-6" />
                 <span className="sr-only">LinkedIn</span>
               </Link>
-              <Link href="mailto:hello@dcui.dev" className="hover:text-royal-500 transition-colors">
-                <Mail className="h-6 w-6" />
-                <span className="sr-only">Email</span>
-              </Link>
             </div>
           </div>
         </div>
