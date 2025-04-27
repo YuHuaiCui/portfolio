@@ -1,81 +1,27 @@
 "use client"
 
-import type React from "react"
-
-import { useState, useRef } from "react"
+import React from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { AlertCircle, CheckCircle2, Loader2 } from "lucide-react"
+import { AlertCircle, CheckCircle2 } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { motion } from "framer-motion"
-import { useRecaptcha } from "@/hooks/use-recaptcha"
 
 export default function Contact() {
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [formStatus, setFormStatus] = useState<{
-    success?: boolean
-    message?: string
-  } | null>(null)
-  const formRef = useRef<HTMLFormElement>(null)
-
-  const { executeRecaptcha, isLoading: isRecaptchaLoading } = useRecaptcha("contact_form")
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    setIsSubmitting(true)
-    setFormStatus(null)
-
-    try {
-      // Execute reCAPTCHA and get token
-      const token = await executeRecaptcha()
-
-      if (!token) {
-        setFormStatus({
-          success: false,
-          message: "reCAPTCHA verification failed. Please try again.",
-        })
-        return
-      }
-
-      // Add the token to a hidden field in the form
-      const recaptchaInput = document.createElement("input")
-      recaptchaInput.type = "hidden"
-      recaptchaInput.name = "g-recaptcha-response"
-      recaptchaInput.value = token
-      formRef.current?.appendChild(recaptchaInput)
-
-      // Submit the form
-      formRef.current?.submit()
-
-      // Show success message
-      setFormStatus({
-        success: true,
-        message: "Thank you for your message! I'll get back to you soon.",
-      })
-
-      // Reset the form
-      formRef.current?.reset()
-    } catch (error) {
-      setFormStatus({
-        success: false,
-        message: "There was an error sending your message. Please try again.",
-      })
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
+  // You can keep local UI state for displaying messages after redirect,
+  // or remove entirely if you prefer FormSubmit's built-in confirmation.
 
   return (
     <section id="contact" className="py-20 px-4 bg-muted/50 relative">
-      {/* Simple top border/divider */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-border to-transparent"></div>
+      {/* Top border */}
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
-      {/* Background decorations */}
-      <div className="absolute -top-40 -right-40 w-80 h-80 bg-royal-200 dark:bg-royal-900 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
-      <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-200 dark:bg-blue-900 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+      {/* Decorative blobs */}
+      <div className="absolute -top-40 -right-40 w-80 h-80 bg-royal-200 dark:bg-royal-900 rounded-full mix-blend-multiply filter blur-3xl opacity-20" />
+      <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-200 dark:bg-blue-900 rounded-full mix-blend-multiply filter blur-3xl opacity-20" />
 
       <div className="container mx-auto max-w-4xl relative z-10">
         <motion.h2
@@ -107,38 +53,28 @@ export default function Contact() {
           <Card className="max-w-xl mx-auto">
             <CardHeader>
               <CardTitle>Contact Me</CardTitle>
-              <CardDescription>Fill out the form below and I'll get back to you as soon as possible.</CardDescription>
+              <CardDescription>
+                Fill out the form below and I'll get back to you as soon as possible.
+              </CardDescription>
             </CardHeader>
             <CardContent>
-              {formStatus && (
-                <Alert
-                  className={`mb-6 ${formStatus.success ? "bg-green-50 dark:bg-green-900/20" : "bg-red-50 dark:bg-red-900/20"}`}
-                >
-                  {formStatus.success ? (
-                    <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-400" />
-                  ) : (
-                    <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
-                  )}
-                  <AlertTitle>{formStatus.success ? "Success!" : "Error!"}</AlertTitle>
-                  <AlertDescription>{formStatus.message}</AlertDescription>
-                </Alert>
-              )}
-
-              {/* FormSubmit form */}
               <form
-                ref={formRef}
-                onSubmit={handleSubmit}
-                action="de2cd52bbe952772d614be0c6d64c5b9"
+                action="https://formsubmit.co/de2cd52bbe952772d614be0c6d64c5b9"
                 method="POST"
                 className="space-y-6"
               >
                 {/* FormSubmit configuration */}
                 <input type="hidden" name="_subject" value="New message from your portfolio!" />
                 <input type="hidden" name="_template" value="table" />
-                <input type="hidden" name="_captcha" value="false" />
-                <input type="hidden" name="_next" value={typeof window !== "undefined" ? window.location.href : ""} />
-                {/* Honeypot field to prevent spam */}
+                {/* Remove _captcha=false to enable FormSubmit's built-in captcha */}
+                <input
+                  type="hidden"
+                  name="_next"
+                  value={typeof window !== "undefined" ? window.location.href : ""}
+                />
+                {/* Honeypot to trap bots */}
                 <input type="text" name="_honey" style={{ display: "none" }} />
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Name</Label>
@@ -149,60 +85,35 @@ export default function Contact() {
                     <Input id="email" name="email" type="email" required />
                   </div>
                 </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="subject">Subject</Label>
                   <Input id="subject" name="subject" required />
                 </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="message">Message</Label>
                   <Textarea id="message" name="message" rows={5} required />
                 </div>
+
                 <Button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-royal-500 to-royal-700 hover:from-royal-600 hover:to-royal-800 border-0
-  transition-all duration-300 hover:scale-105 hover:shadow-md hover:shadow-royal-500/20 
-  dark:hover:shadow-royal-700/20 relative overflow-hidden group"
-                  disabled={isSubmitting || isRecaptchaLoading}
+                  className="w-full bg-gradient-to-r from-royal-500 to-royal-700 hover:from-royal-600 hover:to-royal-800 border-0 transition-all duration-300 hover:scale-105 hover:shadow-md hover:shadow-royal-500/20 dark:hover:shadow-royal-700/20"
                 >
-                  <span
-                    className="absolute inset-0 w-full h-full bg-gradient-to-r from-royal-400/0 via-white/10 to-royal-400/0 
-    transform -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"
-                  ></span>
-                  {isSubmitting || isRecaptchaLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      <span className="relative z-10">{isRecaptchaLoading ? "Verifying..." : "Sending..."}</span>
-                    </>
-                  ) : (
-                    <span className="relative z-10">Send Message</span>
-                  )}
+                  Send Message
                 </Button>
+
                 <p className="text-xs text-muted-foreground text-center mt-2">
-                  This site is protected by reCAPTCHA and the Google{" "}
-                  <a
-                    href="https://policies.google.com/privacy"
-                    className="underline"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Privacy Policy
-                  </a>{" "}
-                  and{" "}
-                  <a
-                    href="https://policies.google.com/terms"
-                    className="underline"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Terms of Service
-                  </a>{" "}
-                  apply.
+                  This site is protected by FormSubmit's default captcha.
                 </p>
               </form>
             </CardContent>
           </Card>
         </motion.div>
       </div>
+
+      {/* Bottom border */}
+      <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-border to-transparent" />
     </section>
   )
 }

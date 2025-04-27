@@ -7,7 +7,6 @@ import { ChevronDown, BarChart2, BarChart, Loader2 } from "lucide-react"
 import ParticleNetwork from "./particle-network"
 import MetricsPanel from "./metrics-panel"
 import { useMediaQuery } from "@/hooks/use-media-query"
-import { useRecaptcha } from "@/hooks/use-recaptcha"
 import { useToast } from "@/components/ui/use-toast"
 
 export default function Hero() {
@@ -16,7 +15,6 @@ export default function Hero() {
   const [showMetrics, setShowMetrics] = useState(false) // State to control metrics visibility - hidden by default
   const [isContactVerifying, setIsContactVerifying] = useState(false)
   const isMobile = useMediaQuery("(max-width: 640px)")
-  const { executeRecaptcha } = useRecaptcha("contact_navigation")
   const { toast } = useToast()
 
   useEffect(() => {
@@ -38,33 +36,6 @@ export default function Hero() {
   }
 
   const scrollToSection = async (sectionId: string) => {
-    // If it's the contact section, verify with reCAPTCHA first
-    if (sectionId === "contact") {
-      setIsContactVerifying(true)
-
-      try {
-        const token = await executeRecaptcha()
-
-        if (!token) {
-          toast({
-            title: "Verification Failed",
-            description: "Could not verify you are human. Please try again.",
-            variant: "destructive",
-          })
-          return
-        }
-      } catch (error) {
-        toast({
-          title: "Verification Error",
-          description: "An error occurred during verification. Please try again.",
-          variant: "destructive",
-        })
-        return
-      } finally {
-        setIsContactVerifying(false)
-      }
-    }
-
     const section = document.getElementById(sectionId)
     if (section) {
       section.scrollIntoView({ behavior: "smooth" })
@@ -77,7 +48,7 @@ export default function Hero() {
     visible: {
       opacity: 1,
       transition: {
-        when: "beforeChildren",
+        when: "beforeChildren", 
         staggerChildren: 0.3,
         delayChildren: 0.3,
       },
