@@ -159,7 +159,7 @@ export default function Hero() {
           <motion.div variants={itemVariants} className="w-full">
             <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-4">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-royal-400 to-royal-600">
-                Hello, I'm Your Name
+                Hello, I'm Daniel Cui
               </span>
             </h1>
           </motion.div>
