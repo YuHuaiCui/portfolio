@@ -523,15 +523,16 @@ const projects: Project[] = [
   },
   {
     id: 4,
-    slug: "android-app",
-    title: "Mobile Navigation App",
+    slug: "event-hub",
+    title: "Event Hub",
     description:
-      "A collaborative Android application developed using Agile methodologies with integrated mapping and location services.",
-    thumbnail: "/placeholder.svg?height=300&width=500&text=Android+App",
+      "An mobile event organization app with lottery participant selection, integrated mapping and location services, and custom moderation tools.",
+    thumbnail: "Event-Hub/thumbnail.png",
     images: [
-      "/placeholder.svg?height=300&width=500&text=App+Interface",
-      "/placeholder.svg?height=300&width=500&text=Map+Integration",
-      "/placeholder.svg?height=300&width=500&text=Team+Collaboration",
+      "Event-Hub/manage.png",
+      "Event-Hub/profile.png",
+      "Event-Hub/facility.png",
+      "Event-Hub/qr-code.png",
     ],
     tags: [
       "Java",
@@ -559,7 +560,7 @@ const projects: Project[] = [
     },
     githubLink: "#",
     detailedDescription:
-      "This Android application was developed as part of a collaborative team project involving 5 developers working across 4 sprints, each lasting 2-3 weeks. The app provides users with advanced navigation capabilities and location-based services through integration with Google Maps API.\n\n" +
+      "This Android application was developed as part of a collaborative team project involving 5 developers working across 4 sprints, each lasting 2-3 weeks. The app provides users with event organization, facility management and location-based services through integration with Google Maps API.\n\n" +
       "Technical Stack:\n" +
       "• Java - Primary programming language for app logic and functionality\n" +
       "• Android Studio - IDE used for development and testing\n" +
@@ -831,7 +832,7 @@ export default function Projects() {
                     src={getCurrentImageSrc() || "/placeholder.svg"}
                     alt={`${selectedProject.title}`}
                     fill
-                    className="object-cover rounded-lg"
+                    className="object-contain rounded-lg"
                   />
                   {selectedProject.images.length > 1 && (
                     <>

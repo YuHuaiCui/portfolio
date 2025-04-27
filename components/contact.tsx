@@ -10,6 +10,7 @@ import { AlertCircle, CheckCircle2, Loader2 } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { sendContactForm } from "@/app/actions"
 import { motion } from "framer-motion"
+import { useRecaptcha } from "@/hooks/use-recaptcha"
 
 export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -18,15 +19,23 @@ export default function Contact() {
     message?: string
   } | null>(null)
 
+  const { executeRecaptcha, isLoading: isRecaptchaLoading } = useRecaptcha("contact_form")
+
   async function handleSubmit(formData: FormData) {
     setIsSubmitting(true)
     setFormStatus(null)
 
     try {
+      // Execute reCAPTCHA and get token
+      const token = await executeRecaptcha()
+
+      // Add token to form data
+      formData.append("recaptchaToken", token || "")
+
       const result = await sendContactForm(formData)
       setFormStatus({
-        success: true,
-        message: "Thank you for your message! I'll get back to you soon.",
+        success: result.success,
+        message: result.message,
       })
     } catch (error) {
       setFormStatus({
@@ -117,21 +126,42 @@ export default function Contact() {
                   className="w-full bg-gradient-to-r from-royal-500 to-royal-700 hover:from-royal-600 hover:to-royal-800 border-0
   transition-all duration-300 hover:scale-105 hover:shadow-md hover:shadow-royal-500/20 
   dark:hover:shadow-royal-700/20 relative overflow-hidden group"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || isRecaptchaLoading}
                 >
                   <span
                     className="absolute inset-0 w-full h-full bg-gradient-to-r from-royal-400/0 via-white/10 to-royal-400/0 
     transform -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"
                   ></span>
-                  {isSubmitting ? (
+                  {isSubmitting || isRecaptchaLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      <span className="relative z-10">Sending...</span>
+                      <span className="relative z-10">{isRecaptchaLoading ? "Verifying..." : "Sending..."}</span>
                     </>
                   ) : (
                     <span className="relative z-10">Send Message</span>
                   )}
                 </Button>
+                <p className="text-xs text-muted-foreground text-center mt-2">
+                  This site is protected by reCAPTCHA and the Google{" "}
+                  <a
+                    href="https://policies.google.com/privacy"
+                    className="underline"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Privacy Policy
+                  </a>{" "}
+                  and{" "}
+                  <a
+                    href="https://policies.google.com/terms"
+                    className="underline"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Terms of Service
+                  </a>{" "}
+                  apply.
+                </p>
               </form>
             </CardContent>
           </Card>

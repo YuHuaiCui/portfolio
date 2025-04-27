@@ -131,6 +131,14 @@ const skillColorMap: Record<
     hover: "hover:bg-blue-200",
     hoverDark: "dark:hover:bg-blue-800",
   },
+  latex: {
+    bg: "bg-green-100",
+    bgDark: "dark:bg-green-900/50",
+    text: "text-green-800",
+    textDark: "dark:text-green-200",
+    hover: "hover:bg-green-200",
+    hoverDark: "dark:hover:bg-green-800",
+  },
   default: {
     bg: "bg-gray-100",
     bgDark: "dark:bg-gray-800",
@@ -147,15 +155,16 @@ export default function Experience() {
       id: 0,
       role: "Game Engine Developer",
       company: "University of Alberta",
-      period: "Summer 2025",
+      period: "May 2025 - Aug 2025",
       location: "Edmonton, AB",
       description:
-        "Developed an ECS Game Engine along with other labs and assignments for CMPUT 350 students.",
-      skills: ["C++", "Git", "Bash"],
+        "Built a lightweight ECS C++ game engine as an example for future student projects and designed course curriculum (lectures, labs, and assignments)",
+      skills: ["C++", "Git", "Bash", "LaTeX"],
       skillColors: {
         "C++": "cpp",
         Git: "git",
         Bash: "bash",
+        LaTeX: "latex",
       },
     },
     {
@@ -165,7 +174,7 @@ export default function Experience() {
       period: "Jan 2025 - Apr 2025",
       location: "Alberta, Canada",
       description:
-        "I maintained the PostgreSQL database, managed the deployment service, and fixed technical issues with the platform to ensure the website ran smoothly during the competition.",
+        "I maintained the PostgreSQL database, managed the deployment service, and fixed technical issues with the platform to ensure the website ran smoothly for the competition.",
       skills: ["Django", "Python", "PostgreSQL", "Docker", "Git"],
       skillColors: {
         Django: "django",
@@ -257,7 +266,7 @@ export default function Experience() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-muted-foreground mb-4">{exp.description}</p>
+                    <p className="text-muted-foreground mb-4 text-left">{exp.description}</p>
                     <div className="flex flex-wrap gap-2">
                       {exp.skills.map((skill: string) => (
                         <Badge key={skill} className={getSkillStyles(skill, exp)}>

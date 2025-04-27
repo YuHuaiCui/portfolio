@@ -3,16 +3,21 @@
 import { Button } from "@/components/ui/button"
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
-import { ChevronDown, BarChart2, BarChart } from "lucide-react"
+import { ChevronDown, BarChart2, BarChart, Loader2 } from "lucide-react"
 import ParticleNetwork from "./particle-network"
 import MetricsPanel from "./metrics-panel"
 import { useMediaQuery } from "@/hooks/use-media-query"
+import { useRecaptcha } from "@/hooks/use-recaptcha"
+import { useToast } from "@/components/ui/use-toast"
 
 export default function Hero() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [particleCount, setParticleCount] = useState(0)
-  const [showMetrics, setShowMetrics] = useState(false) // State to control metrics visibility
+  const [showMetrics, setShowMetrics] = useState(false) // State to control metrics visibility - hidden by default
+  const [isContactVerifying, setIsContactVerifying] = useState(false)
   const isMobile = useMediaQuery("(max-width: 640px)")
+  const { executeRecaptcha } = useRecaptcha("contact_navigation")
+  const { toast } = useToast()
 
   useEffect(() => {
     // Set loaded state after a small delay to trigger animations
@@ -32,7 +37,34 @@ export default function Hero() {
     }
   }
 
-  const scrollToSection = (sectionId: string) => {
+  const scrollToSection = async (sectionId: string) => {
+    // If it's the contact section, verify with reCAPTCHA first
+    if (sectionId === "contact") {
+      setIsContactVerifying(true)
+
+      try {
+        const token = await executeRecaptcha()
+
+        if (!token) {
+          toast({
+            title: "Verification Failed",
+            description: "Could not verify you are human. Please try again.",
+            variant: "destructive",
+          })
+          return
+        }
+      } catch (error) {
+        toast({
+          title: "Verification Error",
+          description: "An error occurred during verification. Please try again.",
+          variant: "destructive",
+        })
+        return
+      } finally {
+        setIsContactVerifying(false)
+      }
+    }
+
     const section = document.getElementById(sectionId)
     if (section) {
       section.scrollIntoView({ behavior: "smooth" })
@@ -127,7 +159,7 @@ export default function Hero() {
           <motion.div variants={itemVariants} className="w-full">
             <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-4">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-royal-400 to-royal-600">
-                Hello, I'm Daniel Cui
+                Hello, I'm Your Name
               </span>
             </h1>
           </motion.div>
@@ -136,7 +168,7 @@ export default function Hero() {
             className="text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-2xl mb-8"
             variants={itemVariants}
           >
-            A passionate developer building efficient digital solutions
+            A passionate developer building amazing digital experiences
           </motion.p>
 
           <motion.div variants={itemVariants} className="w-full flex justify-center">
@@ -153,8 +185,16 @@ export default function Hero() {
                 variant="outline"
                 className="text-foreground border-foreground hover:bg-foreground/10 dark:bg-black/30 backdrop-blur-sm transition-all duration-300 hover:scale-105 z-10 relative"
                 onClick={() => scrollToSection("contact")}
+                disabled={isContactVerifying}
               >
-                Contact Me
+                {isContactVerifying ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <span>Verifying...</span>
+                  </>
+                ) : (
+                  "Contact Me"
+                )}
               </Button>
             </div>
           </motion.div>

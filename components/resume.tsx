@@ -1,12 +1,20 @@
 "use client"
 
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { motion } from "framer-motion"
-import { Download, Eye, FileText, Briefcase, GraduationCap, Award } from "lucide-react"
+import { Download, Eye, FileText, Briefcase, GraduationCap, Award, Loader2 } from "lucide-react"
 import Link from "next/link"
+import { useRecaptcha } from "@/hooks/use-recaptcha"
+import { verifyResumeDownload } from "@/app/actions"
+import { useToast } from "@/components/ui/use-toast"
 
 export default function Resume() {
+  const [isDownloading, setIsDownloading] = useState(false)
+  const { executeRecaptcha, isLoading: isRecaptchaLoading } = useRecaptcha("resume_download")
+  const { toast } = useToast()
+
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -28,12 +36,12 @@ export default function Resume() {
     {
       icon: <Briefcase className="h-10 w-10 text-royal-500" />,
       title: "Work Experience",
-      description: "1 year of professional experience in full-stack software development",
+      description: "1 year of professional experience in software development and design",
     },
     {
       icon: <GraduationCap className="h-10 w-10 text-royal-500" />,
       title: "Education",
-      description: "Bachelor's degree in Computer Science with Specialization",
+      description: "Bachelor's in Computer Science with Specialization",
     },
     {
       icon: <Award className="h-10 w-10 text-royal-500" />,
@@ -41,6 +49,51 @@ export default function Resume() {
       description: "WIP",
     },
   ]
+
+  const handleDownload = async () => {
+    setIsDownloading(true)
+
+    try {
+      // Execute reCAPTCHA and get token
+      const token = await executeRecaptcha()
+
+      if (!token) {
+        toast({
+          title: "Verification Failed",
+          description: "Could not verify you are human. Please try again.",
+          variant: "destructive",
+        })
+        return
+      }
+
+      // Verify token on server
+      const result = await verifyResumeDownload(token)
+
+      if (result.success) {
+        // Create a temporary link and trigger download
+        const link = document.createElement("a")
+        link.href = result.downloadUrl
+        link.download = "YourName_Resume.pdf"
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      } else {
+        toast({
+          title: "Download Failed",
+          description: result.message || "Could not download resume. Please try again.",
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      toast({
+        title: "Download Failed",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsDownloading(false)
+    }
+  }
 
   return (
     <section id="resume" className="py-20 px-4 bg-muted/30 relative">
@@ -82,7 +135,7 @@ export default function Resume() {
                     <FileText className="h-16 w-16 text-royal-600 dark:text-royal-400" />
                   </div>
                   <div className="text-center mt-6">
-                    <h3 className="text-xl font-bold">Daniel Cui</h3>
+                    <h3 className="text-xl font-bold">Your Name</h3>
                     <p className="text-muted-foreground">Full Stack Developer</p>
                   </div>
                   <div className="mt-8 space-y-2 text-sm">
@@ -98,19 +151,27 @@ export default function Resume() {
               <CardContent className="p-6 bg-card">
                 <div className="flex justify-center space-x-4">
                   <Button
-                    asChild
+                    onClick={handleDownload}
+                    disabled={isDownloading || isRecaptchaLoading}
                     className="bg-gradient-to-r from-royal-500 to-royal-700 hover:from-royal-600 hover:to-royal-800 border-0
   transition-all duration-300 hover:scale-105 hover:shadow-md hover:shadow-royal-500/20 
   dark:hover:shadow-royal-700/20 relative overflow-hidden group"
                   >
-                    <a href="/resume.pdf" download="YourName_Resume.pdf">
-                      <span
-                        className="absolute inset-0 w-full h-full bg-gradient-to-r from-royal-400/0 via-white/10 to-royal-400/0 
+                    <span
+                      className="absolute inset-0 w-full h-full bg-gradient-to-r from-royal-400/0 via-white/10 to-royal-400/0 
       transform -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"
-                      ></span>
-                      <Download className="mr-2 h-4 w-4 transition-transform group-hover:rotate-12 duration-200" />
-                      <span className="relative z-10">Download PDF</span>
-                    </a>
+                    ></span>
+                    {isDownloading || isRecaptchaLoading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        <span className="relative z-10">{isRecaptchaLoading ? "Verifying..." : "Downloading..."}</span>
+                      </>
+                    ) : (
+                      <>
+                        <Download className="mr-2 h-4 w-4 transition-transform group-hover:rotate-12 duration-200" />
+                        <span className="relative z-10">Download PDF</span>
+                      </>
+                    )}
                   </Button>
                   <Button
                     asChild
@@ -124,6 +185,7 @@ export default function Resume() {
                     </Link>
                   </Button>
                 </div>
+                <p className="text-xs text-muted-foreground text-center mt-4">Protected by reCAPTCHA</p>
               </CardContent>
             </Card>
           </motion.div>
