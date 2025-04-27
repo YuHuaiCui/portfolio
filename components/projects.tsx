@@ -483,11 +483,14 @@ const projects: Project[] = [
     id: 3,
     slug: "pillpal",
     title: "PillPal - Medication Platform",
-    description: "A weather dashboard that displays current and forecasted weather data for multiple locations.",
-    thumbnail: "/placeholder.svg?height=300&width=500",
+    description: "HackED 2025 Project: Pill Pal is a user-friendly application designed to help you manage your health by tracking your medication schedule and connecting you with supportive communities.",
+    thumbnail: "PillPal/thumbnail.png",
     images: [
-      "/placeholder.svg?height=300&width=500&text=Forecast+View",
-      "/placeholder.svg?height=300&width=500&text=Location+Search",
+      "PillPal/dashboard.png",
+      "PillPal/settings.png",
+      "PillPal/tracker.png",
+      "PillPal/logs.png",
+      "PillPal/forum.png",
     ],
     tags: [
       "Next.js",
@@ -743,20 +746,20 @@ export default function Projects() {
                           <span>Devpost</span>
                         </a>
                       </Button>
+                    ) : project.githubLink ? (
+                      <Button
+                        asChild
+                        variant="outline"
+                        size={isMobile ? "sm" : "default"}
+                        className="transition-all duration-300 hover:scale-105 hover:bg-background/80 hover:border-royal-300 dark:hover:border-royal-700 group"
+                      >
+                        <a href={project.githubLink} target="_blank" rel="noopener noreferrer">
+                          <Github className="mr-2 h-4 w-4 transition-transform group-hover:rotate-12 duration-200" />
+                          <span>Code</span>
+                        </a>
+                      </Button>
                     ) : (
-                      project.githubLink && (
-                        <Button
-                          asChild
-                          variant="outline"
-                          size={isMobile ? "sm" : "default"}
-                          className="transition-all duration-300 hover:scale-105 hover:bg-background/80 hover:border-royal-300 dark:hover:border-royal-700 group"
-                        >
-                          <a href={project.githubLink} target="_blank" rel="noopener noreferrer">
-                            <Github className="mr-2 h-4 w-4 transition-transform group-hover:rotate-12 duration-200" />
-                            <span>Code</span>
-                          </a>
-                        </Button>
-                      )
+                      <div />
                     )}
                   <Button
                     size={isMobile ? "sm" : "default"}
