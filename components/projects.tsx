@@ -408,7 +408,7 @@ const projects: Project[] = [
     slug: "competition-scoring-platform",
     title: "Competition Scoring Platform",
     description:
-      "A full-stack platform for a non-profit to organization to score and judge their environmental competitions",
+      "A full-stack platform for a non-profit organization to score and judge their environmental competitions",
     thumbnail: "AlbertaEnvirothon/thumbnail.png",
     images: [],
     tags: [
@@ -526,7 +526,7 @@ const projects: Project[] = [
     slug: "event-hub",
     title: "Event Hub",
     description:
-      "An mobile event organization app with lottery participant selection, integrated mapping and location services, and custom moderation tools.",
+      "A mobile event organization app with lottery participant selection, integrated mapping and location services, and custom moderation tools.",
     thumbnail: "Event-Hub/thumbnail.png",
     images: [
       "Event-Hub/manage.png",
