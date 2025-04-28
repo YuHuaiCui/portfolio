@@ -12,15 +12,9 @@ export default function Resume() {
   const [isDownloading, setIsDownloading] = useState(false)
   const { toast } = useToast()
 
-  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
+    visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
   }
 
   const itemVariants = {
@@ -28,7 +22,6 @@ export default function Resume() {
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   }
 
-  // Resume highlights data
   const resumeHighlights = [
     {
       icon: <Briefcase className="h-10 w-10 text-royal-500" />,
@@ -49,13 +42,12 @@ export default function Resume() {
 
   const handleDownload = async () => {
     setIsDownloading(true)
-
     try {
-      const link = document.createElement("a");
-      link.href = "/api/download" ;
-      link.download = "DanielCui_Resume.pdf";
-      link.click();
-    } catch (error) {
+      const link = document.createElement("a")
+      link.href = "/api/download"
+      link.download = "DanielCui_Resume.pdf"
+      link.click()
+    } catch {
       toast({
         title: "Download Failed",
         description: "An unexpected error occurred. Please try again.",
@@ -67,15 +59,16 @@ export default function Resume() {
   }
 
   return (
-    <section id="resume" className="py-20 px-4 bg-muted/30 relative">
-      {/* Simple top border/divider */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-border to-transparent"></div>
+    <section id="resume" className="py-20 px-4 sm:px-6 lg:px-8 bg-muted/30 relative overflow-x-hidden">
+      {/* Top divider */}
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
-      {/* Background decorations */}
-      <div className="absolute -top-40 -left-40 w-80 h-80 bg-royal-200 dark:bg-royal-900 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
-      <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-blue-200 dark:bg-blue-900 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+      {/* Decorative backgrounds */}
+      <div className="absolute -top-40 -left-40 w-80 h-80 bg-royal-200 dark:bg-royal-900 rounded-full mix-blend-multiply filter blur-3xl opacity-20" />
+      <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-blue-200 dark:bg-blue-900 rounded-full mix-blend-multiply filter blur-3xl opacity-20" />
 
-      <div className="container mx-auto max-w-5xl relative z-10">
+      <div className="mx-auto w-full max-w-5xl relative z-10">
+        {/* Header */}
         <motion.div
           className="text-center mb-12"
           initial={{ opacity: 0, y: -20 }}
@@ -89,8 +82,8 @@ export default function Resume() {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8 items-center">
-          {/* Left side - Resume preview card */}
+        <div className="grid md:grid-cols-2 gap-8 items-start">
+          {/* Left: Preview Card */}
           <motion.div
             className="flex flex-col items-center"
             initial={{ opacity: 0, x: -50 }}
@@ -98,9 +91,9 @@ export default function Resume() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <Card className="w-full max-w-md overflow-hidden border-2 border-royal-200 dark:border-royal-800 shadow-lg">
-              <div className="relative aspect-[3/4] w-full bg-gradient-to-br from-royal-50 to-royal-100 dark:from-royal-900/30 dark:to-royal-950/50 p-6">
-                <div className="absolute top-0 left-0 w-full h-8 bg-royal-500"></div>
+            <Card className="w-full sm:max-w-md border-2 border-royal-200 dark:border-royal-800 shadow-lg">
+              <div className="relative aspect-[3/4] bg-gradient-to-br from-royal-50 to-royal-100 dark:from-royal-900/30 dark:to-royal-950/50 p-6">
+                <div className="absolute top-0 left-0 w-full h-8 bg-royal-500" />
                 <div className="mt-4">
                   <div className="w-32 h-32 mx-auto rounded-full bg-royal-200 dark:bg-royal-800 mb-4 flex items-center justify-center">
                     <FileText className="h-16 w-16 text-royal-600 dark:text-royal-400" />
@@ -110,12 +103,12 @@ export default function Resume() {
                     <p className="text-muted-foreground">Full Stack Developer</p>
                   </div>
                   <div className="mt-8 space-y-2 text-sm">
-                    <div className="h-2 bg-gray-300 dark:bg-gray-700 rounded w-full"></div>
-                    <div className="h-2 bg-gray-300 dark:bg-gray-700 rounded w-3/4"></div>
-                    <div className="h-2 bg-gray-300 dark:bg-gray-700 rounded w-5/6"></div>
-                    <div className="h-2 bg-gray-300 dark:bg-gray-700 rounded w-2/3"></div>
-                    <div className="h-2 bg-gray-300 dark:bg-gray-700 rounded w-full"></div>
-                    <div className="h-2 bg-gray-300 dark:bg-gray-700 rounded w-4/5"></div>
+                    <div className="h-2 bg-gray-300 dark:bg-gray-700 rounded w-full" />
+                    <div className="h-2 bg-gray-300 dark:bg-gray-700 rounded w-3/4" />
+                    <div className="h-2 bg-gray-300 dark:bg-gray-700 rounded w-5/6" />
+                    <div className="h-2 bg-gray-300 dark:bg-gray-700 rounded w-2/3" />
+                    <div className="h-2 bg-gray-300 dark:bg-gray-700 rounded w-full" />
+                    <div className="h-2 bg-gray-300 dark:bg-gray-700 rounded w-4/5" />
                   </div>
                 </div>
               </div>
@@ -124,18 +117,11 @@ export default function Resume() {
                   <Button
                     onClick={handleDownload}
                     disabled={isDownloading}
-                    className="bg-gradient-to-r from-royal-500 to-royal-700 hover:from-royal-600 hover:to-royal-800 border-0
-  transition-all duration-300 hover:scale-105 hover:shadow-md hover:shadow-royal-500/20 
-  dark:hover:shadow-royal-700/20 relative overflow-hidden group"
+                    className="bg-gradient-to-r from-royal-500 to-royal-700 hover:from-royal-600 hover:to-royal-800 border-0 transition-all duration-300 hover:scale-105 hover:shadow-md hover:shadow-royal-500/20 dark:hover:shadow-royal-700/20 relative overflow-hidden group"
                   >
-                    <span
-                      className="absolute inset-0 w-full h-full bg-gradient-to-r from-royal-400/0 via-white/10 to-royal-400/0 
-      transform -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"
-                    ></span>
+                    <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-royal-400/0 via-white/10 to-royal-400/0 transform -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
                     {isDownloading ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      </>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     ) : (
                       <>
                         <Download className="mr-2 h-4 w-4 transition-transform group-hover:rotate-12 duration-200" />
@@ -146,8 +132,7 @@ export default function Resume() {
                   <Button
                     asChild
                     variant="outline"
-                    className="transition-all duration-300 hover:scale-105 hover:bg-background/80 hover:border-royal-300 
-  dark:hover:border-royal-700 group"
+                    className="transition-all duration-300 hover:scale-105 hover:bg-background/80 hover:border-royal-300 dark:hover:border-royal-700 group"
                   >
                     <Link href="/DanielCui_Resume.pdf" target="_blank" rel="noopener noreferrer">
                       <Eye className="mr-2 h-4 w-4 transition-transform group-hover:rotate-12 duration-200" />
@@ -160,7 +145,7 @@ export default function Resume() {
             </Card>
           </motion.div>
 
-          {/* Right side - Resume highlights */}
+          {/* Right: Highlights */}
           <motion.div
             variants={containerVariants}
             initial="hidden"
@@ -169,9 +154,9 @@ export default function Resume() {
             className="space-y-6"
           >
             <h3 className="text-2xl font-bold mb-6">Resume Highlights</h3>
-            {resumeHighlights.map((item, index) => (
+            {resumeHighlights.map((item, idx) => (
               <motion.div
-                key={index}
+                key={idx}
                 variants={itemVariants}
                 className="flex items-start gap-4 p-4 rounded-lg bg-card hover:bg-muted/50 transition-colors duration-300"
               >
@@ -182,7 +167,7 @@ export default function Resume() {
                 </div>
               </motion.div>
             ))}
-            <motion.div variants={itemVariants} className="pt-4">
+            <motion.div variants={itemVariants}>
               <p className="text-muted-foreground">
                 For a complete overview of my professional background, skills, and achievements, please download my
                 resume or view it online.
@@ -192,8 +177,8 @@ export default function Resume() {
         </div>
       </div>
 
-      {/* Simple bottom border/divider */}
-      <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-border to-transparent"></div>
+      {/* Bottom divider */}
+      <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-border to-transparent" />
     </section>
   )
 }

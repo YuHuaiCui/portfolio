@@ -43,10 +43,15 @@ export default function ParticleNetwork({ onParticleCountChange }: ParticleNetwo
     return {
       baseColors: isDark
         ? ["rgba(99, 113, 241, 0.8)", "rgba(79, 79, 229, 0.8)", "rgba(147, 197, 253, 0.8)"]
-        : ["rgba(79, 79, 229, 0.8)", "rgba(99, 113, 241, 0.8)", "rgba(59, 130, 246, 0.8)"],
-      mouseColor: isDark ? "rgba(239, 68, 68, 0.8)" : "rgba(239, 68, 68, 0.6)",
-      glowStart: isDark ? "rgba(239, 68, 68, 0.3)" : "rgba(239, 68, 68, 0.2)",
-      glowEnd: "rgba(0, 0, 0, 0)",
+        : [
+            "rgba(79, 70, 229, 0.6)", // primary
+            "rgba(102, 126, 234, 0.6)", // accent
+            "rgba(165, 180, 252, 0.6)", // highlight
+          ],
+      mouseColor: isDark ? "rgba(239, 68, 68, 0.8)" : "rgba(239, 68, 68, 0.8)",
+      glowStart: isDark ? "rgba(239, 68, 68, 0.3)" : "rgba(239, 68, 68, 0.3)",
+      glowEnd: isDark ? "rgba(0, 0, 0, 0)" : "rgba(255, 255, 255, 0)",
+      lineOpacityMultiplier: isDark ? 1 : 0.8,
     }
   }, [resolvedTheme])
 
@@ -59,6 +64,7 @@ export default function ParticleNetwork({ onParticleCountChange }: ParticleNetwo
       cellSize: isMobile ? 100 : 150,
       particleDensityFactor: isMobile ? 15000 : 12000,
       maxParticles: isMobile ? 80 : 120,
+      particleSpeed: isMobile ? 0.2 : 0.3, // Adjusted speed for mobile
     }),
     [isMobile],
   )
@@ -120,8 +126,8 @@ export default function ParticleNetwork({ onParticleCountChange }: ParticleNetwo
         newParticles.push({
           x: Math.random() * width,
           y: Math.random() * height,
-          vx: (Math.random() - 0.5) * 0.3,
-          vy: (Math.random() - 0.5) * 0.3,
+          vx: (Math.random() - 0.5) * deviceSettings.particleSpeed,
+          vy: (Math.random() - 0.5) * deviceSettings.particleSpeed,
           radius: Math.random() * (isMobile ? 1.5 : 2) + 1,
           color: themeColors.baseColors[Math.floor(Math.random() * themeColors.baseColors.length)],
         })
@@ -158,6 +164,7 @@ export default function ParticleNetwork({ onParticleCountChange }: ParticleNetwo
     deviceSettings.particleDensityFactor,
     deviceSettings.maxParticles,
     deviceSettings.cellSize,
+    deviceSettings.particleSpeed,
     themeColors.baseColors,
     isMobile,
     updateGrid,
@@ -165,9 +172,24 @@ export default function ParticleNetwork({ onParticleCountChange }: ParticleNetwo
 
   // Mouse movement
   useEffect(() => {
+    // For mobile, simulate a moving point to create some animation
     if (isMobile) {
-      setIsMouseInCanvas(false)
-      return
+      let angle = 0
+      const radius = Math.min(dimensions.width, dimensions.height) * 0.3
+      const centerX = dimensions.width / 2
+      const centerY = dimensions.height / 2
+
+      const movePoint = () => {
+        angle += 0.01
+        setMousePosition({
+          x: centerX + Math.cos(angle) * radius,
+          y: centerY + Math.sin(angle) * radius,
+        })
+        setIsMouseInCanvas(true)
+      }
+
+      const intervalId = setInterval(movePoint, 50)
+      return () => clearInterval(intervalId)
     }
 
     const onMouseMove = (e: MouseEvent) => {
@@ -204,7 +226,7 @@ export default function ParticleNetwork({ onParticleCountChange }: ParticleNetwo
       window.removeEventListener("mousemove", onMouseMove)
       window.removeEventListener("mouseleave", onMouseLeave)
     }
-  }, [isMobile])
+  }, [isMobile, dimensions])
 
   // Animation loop
   useEffect(() => {
@@ -270,7 +292,7 @@ export default function ParticleNetwork({ onParticleCountChange }: ParticleNetwo
           }
 
           if (dist < deviceSettings.connectionDistance) {
-            const opacity = 1 - dist / deviceSettings.connectionDistance
+            const opacity = (1 - dist / deviceSettings.connectionDistance) * themeColors.lineOpacityMultiplier
             const grad = ctx.createLinearGradient(p.x, p.y, p2.x, p2.y)
             grad.addColorStop(0, p.color)
             grad.addColorStop(1, p2.color)
@@ -290,7 +312,7 @@ export default function ParticleNetwork({ onParticleCountChange }: ParticleNetwo
           const dist = Math.sqrt(dx * dx + dy * dy)
 
           if (dist < deviceSettings.mouseConnectionDistance) {
-            const opacity = 1 - dist / deviceSettings.mouseConnectionDistance
+            const opacity = (1 - dist / deviceSettings.mouseConnectionDistance) * themeColors.lineOpacityMultiplier
             const grad = ctx.createLinearGradient(p.x, p.y, mousePosition.x, mousePosition.y)
             grad.addColorStop(0, p.color)
             grad.addColorStop(1, themeColors.mouseColor)
@@ -332,11 +354,8 @@ export default function ParticleNetwork({ onParticleCountChange }: ParticleNetwo
   }, [dimensions, mousePosition, isMouseInCanvas, deviceSettings, themeColors, updateGrid, getNearbyParticles])
 
   return (
-    <div
-      className="absolute inset-0 w-full h-full -z-10 overflow-hidden"
-      style={{ pointerEvents: isMobile ? "none" : "auto" }}
-    >
-      <canvas ref={canvasRef} className="w-full h-full" style={{ pointerEvents: isMobile ? "none" : "auto" }} />
+    <div className="absolute inset-0 w-full h-full -z-10 overflow-hidden">
+      <canvas ref={canvasRef} className="w-full h-full" />
     </div>
   )
 }

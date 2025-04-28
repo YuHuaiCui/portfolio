@@ -5,18 +5,22 @@ import { motion } from "framer-motion"
 
 export default function About() {
   return (
-    <section id="about" className="py-16 md:py-20 px-4 bg-background">
-      <div className="container mx-auto max-w-5xl">
-        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-8 md:mb-12">About Me</h2>
+    <section id="about" className="py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-background">
+      <div className="mx-auto max-w-5xl">
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-8 md:mb-12">
+          About Me
+        </h2>
         <div className="grid md:grid-cols-2 gap-8 md:gap-10 items-center">
+          
+          {/* PHOTO */}
           <motion.div
-            className="relative w-[400px] h-[400px] mx-auto group"
+            className="relative w-full max-w-[400px] aspect-square mx-auto group"
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <div className="absolute -inset-1 bg-gradient-to-r from-royal-500 to-royal-700 rounded-xl opacity-75 group-hover:opacity-100 transition duration-300 blur"></div>
+            <div className="absolute -inset-1 bg-gradient-to-r from-royal-500 to-royal-700 rounded-xl opacity-75 group-hover:opacity-100 transition duration-300 blur" />
             <div className="relative w-full h-full rounded-xl overflow-hidden shadow-lg">
               <Image
                 src="me.jpg"
@@ -26,7 +30,10 @@ export default function About() {
               />
             </div>
           </motion.div>
+          
+          {/* TEXT */}
           <motion.div
+            className="px-2"            // optional extra padding so it never hugs the edge
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -40,8 +47,8 @@ export default function About() {
             </p>
             <p className="text-muted-foreground mb-4 md:mb-6">
               My journey began when built my first video game at the age of 15. Since then, I have been constantly
-              constantly learning and expanding my skillset to stay at the forefront of software development trends and
-              best practices. 
+              learning and expanding my skillset to stay at the forefront of software development trends and
+              best practices.
             </p>
             <p className="text-muted-foreground">
               When I'm not coding, you can find me spending time exploring new recipes, experimenting with new technologies, or

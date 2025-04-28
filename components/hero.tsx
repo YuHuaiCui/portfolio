@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { motion } from "framer-motion"
 import { ChevronDown, BarChart2, BarChart, Loader2 } from "lucide-react"
 import ParticleNetwork from "./particle-network"
@@ -16,6 +16,7 @@ export default function Hero() {
   const [isContactVerifying, setIsContactVerifying] = useState(false)
   const isMobile = useMediaQuery("(max-width: 640px)")
   const { toast } = useToast()
+  const metricsButtonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     // Set loaded state after a small delay to trigger animations
@@ -25,6 +26,20 @@ export default function Hero() {
 
     return () => {
       clearTimeout(timer)
+    }
+  }, [])
+
+  // Effect to ensure the metrics button is properly positioned
+  useEffect(() => {
+    if (metricsButtonRef.current) {
+      // Force the button to the bottom right corner
+      const button = metricsButtonRef.current
+      button.style.position = "fixed"
+      button.style.bottom = "20px"
+      button.style.right = "20px"
+      button.style.top = "auto"
+      button.style.left = "auto"
+      button.style.zIndex = "9999"
     }
   }, [])
 
@@ -48,7 +63,7 @@ export default function Hero() {
     visible: {
       opacity: 1,
       transition: {
-        when: "beforeChildren", 
+        when: "beforeChildren",
         staggerChildren: 0.3,
         delayChildren: 0.3,
       },
@@ -96,22 +111,28 @@ export default function Hero() {
       {/* Particle Network Background - Ensure it's always rendered */}
       <ParticleNetwork onParticleCountChange={handleParticleCountChange} />
 
-      {/* Metrics Toggle Button */}
-      <motion.button
-        className="absolute top-20 right-4 md:right-8 z-20 p-2 rounded-full bg-background/30 backdrop-blur-sm hover:bg-background/50 transition-colors border border-border/50"
+      {/* Metrics Toggle Button - Using inline styles and ref for direct manipulation */}
+      <button
+        ref={metricsButtonRef}
         onClick={toggleMetrics}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1, duration: 0.5 }}
         aria-label={showMetrics ? "Hide metrics" : "Show metrics"}
         title={showMetrics ? "Hide metrics" : "Show metrics"}
+        className="metrics-button p-2 rounded-full bg-background/30 backdrop-blur-sm hover:bg-background/50 transition-colors border border-border/50 shadow-md"
+        style={{
+          position: "fixed",
+          bottom: "20px",
+          right: "20px",
+          top: "auto",
+          left: "auto",
+          zIndex: 9999,
+        }}
       >
         {showMetrics ? (
           <BarChart2 className="h-4 w-4 text-foreground/80" />
         ) : (
           <BarChart className="h-4 w-4 text-foreground/60" />
         )}
-      </motion.button>
+      </button>
 
       <motion.div
         className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-royal-500 to-transparent"
@@ -187,6 +208,18 @@ export default function Hero() {
           <ChevronDown className="h-6 w-6 opacity-70" />
         </motion.button>
       </div>
+
+      {/* Add global style to ensure metrics button positioning */}
+      <style jsx global>{`
+        .metrics-button {
+          position: fixed !important;
+          bottom: 20px !important;
+          right: 20px !important;
+          top: auto !important;
+          left: auto !important;
+          z-index: 9999 !important;
+        }
+      `}</style>
     </section>
   )
 }
