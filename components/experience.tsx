@@ -153,7 +153,7 @@ export default function Experience() {
   const experiences = [
     {
       id: 0,
-      role: "Game Engine Developer",
+      role: "Teaching Assistant",
       company: "University of Alberta",
       period: "May 2025 - Aug 2025",
       location: "Edmonton, AB",
