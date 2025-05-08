@@ -172,7 +172,7 @@ export default function Experience() {
       role: "Backend Developer",
       company: "Alberta Envirothon",
       period: "Jan 2025 - Apr 2025",
-      location: "Alberta, Canada",
+      location: "Edmonton, AB",
       description:
         "Developed and optimized Django RESTful APIs, set up Simple JWT authentication, and resolved platform issues to ensure seamless integration with the frontend team.",
       skills: ["Django", "Python", "PostgreSQL", "Docker", "Git"],
